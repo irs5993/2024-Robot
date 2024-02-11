@@ -4,23 +4,24 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
-public class DriveJoystickCommand extends Command {
-  /** Creates a new DriveJoystickCommand. */
-  private final CommandJoystick joystick = new CommandJoystick(0);
+public class DynamicDriveCommand extends Command {
+
   private final DrivetrainSubsystem drivetrainSubsystem;
-  private double xSpeed, zRotation;
-  
-  public DriveJoystickCommand(DrivetrainSubsystem drivetrainSubsystem, double xSpeed, double zRotation) {
+  private final DoubleSupplier xSpeedSupplier, zRottionSupplier;
+
+  /** Creates a new DynamicDriveCommand. */
+  public DynamicDriveCommand(DrivetrainSubsystem drivetrainSubsystem, DoubleSupplier xSpeedSupplier, DoubleSupplier zRotationSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrainSubsystem = drivetrainSubsystem;
     addRequirements(drivetrainSubsystem);
 
-    xSpeed = joystick.getX();
-    zRotation = joystick.getZ();
+    this.xSpeedSupplier = xSpeedSupplier;
+    this.zRottionSupplier = zRotationSupplier;
   }
 
   // Called when the command is initially scheduled.
@@ -30,7 +31,7 @@ public class DriveJoystickCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrainSubsystem.drive(xSpeed, zRotation);
+    drivetrainSubsystem.drive(-xSpeedSupplier.getAsDouble(),zRottionSupplier.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
