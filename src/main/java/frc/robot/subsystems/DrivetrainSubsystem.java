@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.DriverPorts;
+import frc.robot.Constants.OperatorConstants;
 
 public class DrivetrainSubsystem extends SubsystemBase {
   /** Creates a new DrivetrainSubsystem. */
@@ -31,8 +33,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public DrivetrainSubsystem() {
 
-    leftMotor = new PWMVictorSPX(0);
-    rightMotor = new PWMVictorSPX(1);
+    leftMotor = new PWMVictorSPX(DriverPorts.CHASIS_LEFT);
+    rightMotor = new PWMVictorSPX(DriverPorts.CHASIS_RIGHT);
     rightMotor.setInverted(true);
 
     driveBase = new DifferentialDrive(leftMotor, rightMotor);
