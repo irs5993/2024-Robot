@@ -12,7 +12,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 public class DynamicDriveCommand extends Command {
 
   private final DrivetrainSubsystem drivetrainSubsystem;
-  private final DoubleSupplier xSpeedSupplier, zRottionSupplier;
+  private final DoubleSupplier xSpeedSupplier, zRotationSupplier;
 
   /** Creates a new DynamicDriveCommand. */
   public DynamicDriveCommand(DrivetrainSubsystem drivetrainSubsystem, DoubleSupplier xSpeedSupplier, DoubleSupplier zRotationSupplier) {
@@ -21,7 +21,7 @@ public class DynamicDriveCommand extends Command {
     addRequirements(drivetrainSubsystem);
 
     this.xSpeedSupplier = xSpeedSupplier;
-    this.zRottionSupplier = zRotationSupplier;
+    this.zRotationSupplier = zRotationSupplier;
   }
 
   // Called when the command is initially scheduled.
@@ -31,7 +31,7 @@ public class DynamicDriveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrainSubsystem.drive(-xSpeedSupplier.getAsDouble(),zRottionSupplier.getAsDouble());
+    drivetrainSubsystem.drive(xSpeedSupplier.getAsDouble(), zRotationSupplier.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
