@@ -25,6 +25,11 @@ public class ShooterSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+  public void setShooterSpeed(double speed) {
+    setLeftMotorSpeed(speed);
+    setRightMotorSpeed(speed);
+  }
+
   public void setLeftMotorSpeed(double speed) {
     leftMotor.set(speed);
   }
