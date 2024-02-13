@@ -33,6 +33,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureBindings();
+    configureCommands();
   }
 
   private void configureBindings() {
