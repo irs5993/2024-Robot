@@ -29,6 +29,7 @@ public class MoveArmCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     this.armSubsystem.stop();
+  }
 
   // Returns true when the command should end.
   @Override
