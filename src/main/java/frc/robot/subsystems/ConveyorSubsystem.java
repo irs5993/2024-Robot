@@ -4,14 +4,22 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.DriverPorts;
 
 public class ConveyorSubsystem extends SubsystemBase {
-  /** Creates a new ConveyorSubsystem. */
-  public ConveyorSubsystem() {}
+  private final PWMVictorSPX motor;
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public ConveyorSubsystem() {
+    motor = new PWMVictorSPX(DriverPorts.CONVEYOR);
+  }
+
+  public void setMotorSpeed(double speed) {
+    motor.set(speed);
+  }
+
+  public void stop() {
+    motor.stopMotor();
   }
 }
