@@ -11,7 +11,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class ShooterSubsystem extends SubsystemBase {
-
   private final CANSparkMax leftMotor;
   private final CANSparkMax rightMotor;
 

@@ -13,4 +13,9 @@ public final class Constants {
     public static final int CHASIS_LEFT = 0;
     public static final int CHASIS_RIGHT = 1;
   }
+
+  public static class CANIDS {
+    public static final int SHOOTER_LEFT = 0;
+    public static final int SHOOTER_RIGHT = 1;
+  }
 }
