@@ -8,6 +8,8 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.DynamicDriveCommand;
+import frc.robot.commands.RunConveyorCommand;
+import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,6 +27,7 @@ public class RobotContainer {
 
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+  private final ConveyorSubsystem conveyorSubsystem = new ConveyorSubsystem();
   private final CommandJoystick joystick = new CommandJoystick(OperatorConstants.JOYSTICK_PORT);
 
 
@@ -34,6 +37,11 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    joystick.trigger().whileTrue(new ShootCommand(shooterSubsystem, () -> joystick.getRawAxis(3)));
+
+
+    joystick.button(3).whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.5)); // TAKE IN
+    joystick.button(3).whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.5)); // PUSH OUT
   }
 
   private void configureCommands() {

@@ -19,5 +19,8 @@ public final class Constants {
   public static class CANIDS {
     public static final int SHOOTER_LEFT = 0;
     public static final int SHOOTER_RIGHT = 1;
+    
+    public static final int ARM_RIGHT = 2;
+    public static final int ARM_LEFT = 3;
   }
 }
