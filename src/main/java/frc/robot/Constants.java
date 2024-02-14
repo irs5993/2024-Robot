@@ -22,5 +22,6 @@ public final class Constants {
     
     public static final int ARM_RIGHT = 2;
     public static final int ARM_LEFT = 3;
+    public static final int ARM_ENCODER = 4;
   }
 }

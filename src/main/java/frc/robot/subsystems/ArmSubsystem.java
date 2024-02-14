@@ -5,7 +5,9 @@
 package frc.robot.subsystems;
 import frc.robot.Constants.CANIDS;
 
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,17 +15,27 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ArmSubsystem extends SubsystemBase {
   private final CANSparkMax leftMotor; // <- Lead
   private final CANSparkMax rightMotor; // <- Follower
+  private final CANcoder encoder;
 
   public ArmSubsystem() {
     leftMotor = new CANSparkMax(CANIDS.ARM_LEFT, MotorType.kBrushless);
     rightMotor = new CANSparkMax(CANIDS.ARM_RIGHT, MotorType.kBrushless);
-
     rightMotor.follow(leftMotor);
+
+    encoder = new CANcoder(CANIDS.ARM_ENCODER);
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    System.out.println(encoder.getPosition());
+  }
+
+  public double getArmPosition() {
+    return encoder.getPosition().getValueAsDouble();
+  }
+
+  public double getAbsoluteArmPosition() {
+    return encoder.getAbsolutePosition().getValueAsDouble();
   }
 
   public void setMotorSpeed(double speed) {

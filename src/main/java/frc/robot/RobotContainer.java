@@ -41,11 +41,11 @@ public class RobotContainer {
   private void configureBindings() {
     joystick.trigger().whileTrue(new ShootCommand(shooterSubsystem, () -> joystick.getRawAxis(3)));
 
-    joystick.button(3).whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.5)); // TAKE IN
+    joystick.button(6).whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.5)); // TAKE IN
     joystick.button(4).whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.5)); // PUSH OUT
     
     joystick.button(5).whileTrue(new MoveArmCommand(armSubsystem, 0.5)); // MOVE UP
-    joystick.button(6).whileTrue(new MoveArmCommand(armSubsystem, -0.5)); // MOVE DOWN
+    joystick.button(3).whileTrue(new MoveArmCommand(armSubsystem, -0.5)); // MOVE DOWN
   }
 
   private void configureCommands() {
