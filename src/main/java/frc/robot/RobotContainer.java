@@ -14,6 +14,10 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+
+import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 /**
@@ -36,6 +40,7 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
     configureCommands();
+    configureDashboard();
   }
 
   private void configureBindings() {
@@ -44,12 +49,19 @@ public class RobotContainer {
     joystick.button(6).whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.5)); // TAKE IN
     joystick.button(4).whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.5)); // PUSH OUT
     
-    joystick.button(5).whileTrue(new MoveArmCommand(armSubsystem, 0.5)); // MOVE UP
-    joystick.button(3).whileTrue(new MoveArmCommand(armSubsystem, -0.5)); // MOVE DOWN
+    joystick.button(5).whileTrue(new MoveArmCommand(armSubsystem, 0.1)); // ARM UP
+    joystick.button(3).whileTrue(new MoveArmCommand(armSubsystem, -0.1)); // ARM DOWN
   }
 
   private void configureCommands() {
     drivetrainSubsystem.setDefaultCommand(new DynamicDriveCommand(drivetrainSubsystem, joystick::getY, joystick::getZ));
+  }
+
+  private void configureDashboard() {
+   
+
+
+     
   }
 
   public Command getAutonomousCommand() {

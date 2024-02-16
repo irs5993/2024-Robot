@@ -10,24 +10,29 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ArmSubsystem extends SubsystemBase {
-  private final CANSparkMax leftMotor; // <- Lead
-  private final CANSparkMax rightMotor; // <- Follower
+  private final CANSparkMax leftMotor; 
+  private final CANSparkMax rightMotor; 
   private final CANcoder encoder;
 
   public ArmSubsystem() {
     leftMotor = new CANSparkMax(CANIDS.ARM_LEFT, MotorType.kBrushless);
     rightMotor = new CANSparkMax(CANIDS.ARM_RIGHT, MotorType.kBrushless);
-    rightMotor.follow(leftMotor);
 
     encoder = new CANcoder(CANIDS.ARM_ENCODER);
   }
 
   @Override
   public void periodic() {
-    System.out.println(encoder.getPosition());
+    // Shuffleboard.getTab("CAN Bus")
+    // .add("Arm Left", leftMotor.getBusVoltage());
+
+    //  Shuffleboard.getTab("CAN Bus")
+    // .add("Arm Right", rightMotor.getBusVoltage());
   }
 
   public double getArmPosition() {
@@ -40,9 +45,11 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void setMotorSpeed(double speed) {
     leftMotor.set(speed);
+    rightMotor.set(speed);
   }
 
   public void stop() {
     leftMotor.stopMotor();
+    rightMotor.stopMotor();
   }
 }
