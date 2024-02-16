@@ -10,10 +10,10 @@ public final class Constants {
   }
 
   public static class DriverPorts {
-    public static final int CHASIS_LEFT = 2;
-    public static final int CHASIS_RIGHT = 1;
+    public static final int CHASIS_LEFT = 0;
+    public static final int CHASIS_RIGHT = 9;
 
-    public static final int CONVEYOR = 0;
+    public static final int CONVEYOR = 1;
   }
 
   public static class CANIDS {

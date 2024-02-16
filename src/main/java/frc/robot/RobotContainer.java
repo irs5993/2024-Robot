@@ -49,8 +49,8 @@ public class RobotContainer {
     joystick.button(6).whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.5)); // TAKE IN
     joystick.button(4).whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.5)); // PUSH OUT
     
-    joystick.button(5).whileTrue(new MoveArmCommand(armSubsystem, 0.1)); // ARM UP
-    joystick.button(3).whileTrue(new MoveArmCommand(armSubsystem, -0.1)); // ARM DOWN
+    joystick.button(5).whileTrue(new MoveArmCommand(armSubsystem, 0.2)); // ARM UP
+    joystick.button(3).whileTrue(new MoveArmCommand(armSubsystem, -0.2)); // ARM DOWN
   }
 
   private void configureCommands() {
