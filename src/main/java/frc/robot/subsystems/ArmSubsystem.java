@@ -36,6 +36,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setMotorSpeed(double speed) {
+        System.out.println(speed);
         if (speed < 0 && getEncoderAbsolutePosition() < ARM_MIN) {
             return;
         }

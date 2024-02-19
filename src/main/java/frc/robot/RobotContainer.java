@@ -3,6 +3,8 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.arm.SetArmPositionCommand;
+import frc.robot.helpers.RMath;
 import frc.robot.commands.DynamicDriveCommand;
 import frc.robot.commands.MoveArmCommand;
 import frc.robot.commands.RunConveyorCommand;
@@ -44,6 +46,7 @@ public class RobotContainer {
     joystick.button(5).whileTrue(new MoveArmCommand(armSubsystem, 0.2)); // ARM UP
     joystick.button(3).whileTrue(new MoveArmCommand(armSubsystem, -0.2)); // ARM DOWN
 
+    joystick.button(11).whileTrue(new SetArmPositionCommand(armSubsystem, () -> RMath.map(joystick.getRawAxis(3), -1, 1, 0.433, 0.62)));
     // joystick.button(7).whileTrue(new TargetAndShootCommand(visionSubsystem,
     // drivetrainSubsystem, armSubsystem));
   }
