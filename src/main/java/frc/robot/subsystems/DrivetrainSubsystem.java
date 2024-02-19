@@ -21,8 +21,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   private final DifferentialDrive driveBase;
   private final AHRS gyro;
-
-
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

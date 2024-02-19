@@ -10,10 +10,17 @@ public final class Constants {
   }
 
   public static class DriverPorts {
-    public static final int CHASIS_LEFT = 0;
-    public static final int CHASIS_RIGHT = 9;
+    public static final int CHASIS_LEFT = 1;
+    public static final int CHASIS_RIGHT = 2;
 
-    public static final int CONVEYOR = 1;
+    public static final int CAMERA_SERVO = 8;
+
+    public static final int CONVEYOR = 7;
+  }
+
+  public static class Angles {
+    public static final int SHOOT = 11;
+    public static final int INTAKE = 12;
   }
 
   public static class CANIDS {
@@ -22,6 +29,6 @@ public final class Constants {
     
     public static final int ARM_RIGHT = 3;
     public static final int ARM_LEFT = 4;
-    public static final int ARM_ENCODER = 2;
+    public static final int ARM_ENCODER = 10;
   }
 }
