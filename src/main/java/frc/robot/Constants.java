@@ -10,8 +10,8 @@ public final class Constants {
   }
 
   public static class DriverPorts {
-    public static final int CHASIS_LEFT = 1;
-    public static final int CHASIS_RIGHT = 2;
+    public static final int CHASIS_LEFT = 2;
+    public static final int CHASIS_RIGHT = 1;
 
     public static final int CAMERA_SERVO = 8;
 

@@ -40,7 +40,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public void drive(double xSpeed, double zRotation) {
-    driveBase.arcadeDrive(xSpeed, zRotation);
+    driveBase.arcadeDrive(xSpeed, -zRotation);
   }
 
   public void resetGyro() {

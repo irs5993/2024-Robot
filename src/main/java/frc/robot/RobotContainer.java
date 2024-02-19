@@ -46,7 +46,7 @@ public class RobotContainer {
     joystick.button(5).whileTrue(new MoveArmCommand(armSubsystem, 0.2)); // ARM UP
     joystick.button(3).whileTrue(new MoveArmCommand(armSubsystem, -0.2)); // ARM DOWN
 
-    joystick.button(11).whileTrue(new SetArmPositionCommand(armSubsystem, () -> RMath.map(joystick.getRawAxis(3), -1, 1, 0.433, 0.62)));
+    joystick.button(11).whileTrue(new SetArmPositionCommand(armSubsystem, () -> RMath.map(joystick.getRawAxis(3), 1, -1, 0.46, 0.62)));
     // joystick.button(7).whileTrue(new TargetAndShootCommand(visionSubsystem,
     // drivetrainSubsystem, armSubsystem));
   }
