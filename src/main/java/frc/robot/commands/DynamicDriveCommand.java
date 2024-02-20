@@ -6,22 +6,25 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.helpers.RMath;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class DynamicDriveCommand extends Command {
 
   private final DrivetrainSubsystem drivetrainSubsystem;
-  private final DoubleSupplier xSpeedSupplier, zRotationSupplier;
+  private final DoubleSupplier xSpeedSupplier, zRotationSupplier, multiplierSupplier;
 
   /** Creates a new DynamicDriveCommand. */
-  public DynamicDriveCommand(DrivetrainSubsystem drivetrainSubsystem, DoubleSupplier xSpeedSupplier, DoubleSupplier zRotationSupplier) {
+  public DynamicDriveCommand(DrivetrainSubsystem drivetrainSubsystem, DoubleSupplier xSpeedSupplier, DoubleSupplier zRotationSupplier, DoubleSupplier multiplierSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrainSubsystem = drivetrainSubsystem;
     addRequirements(drivetrainSubsystem);
 
     this.xSpeedSupplier = xSpeedSupplier;
     this.zRotationSupplier = zRotationSupplier;
+    this.multiplierSupplier = multiplierSupplier;
   }
 
   // Called when the command is initially scheduled.
@@ -31,6 +34,8 @@ public class DynamicDriveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    SmartDashboard.putNumber("Position Input", RMath.map(multiplierSupplier.getAsDouble(), 1, -1, 0.004, 0.2));
+
     drivetrainSubsystem.drive(xSpeedSupplier.getAsDouble(), zRotationSupplier.getAsDouble());
   }
 

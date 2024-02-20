@@ -3,6 +3,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.TargetAndShootCommand;
 import frc.robot.commands.arm.SetArmPositionCommand;
 import frc.robot.helpers.RMath;
 import frc.robot.commands.DynamicDriveCommand;
@@ -19,6 +20,9 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
@@ -46,17 +50,28 @@ public class RobotContainer {
     joystick.button(5).whileTrue(new MoveArmCommand(armSubsystem, 0.2)); // ARM UP
     joystick.button(3).whileTrue(new MoveArmCommand(armSubsystem, -0.2)); // ARM DOWN
 
-    joystick.button(11).whileTrue(new SetArmPositionCommand(armSubsystem, () -> RMath.map(joystick.getRawAxis(3), 1, -1, 0.46, 0.62)));
+    
+    joystick.button(9)
+        .onTrue(new SetArmPositionCommand(armSubsystem, () -> 0.015));
+         joystick.button(10)
+        .onTrue(new SetArmPositionCommand(armSubsystem, () -> 0.2));
+
+    joystick.button(11)
+        .whileTrue(new SetArmPositionCommand(armSubsystem, () -> RMath.map(joystick.getRawAxis(3), 1, -1, 0.004, 0.2)));
     // joystick.button(7).whileTrue(new TargetAndShootCommand(visionSubsystem,
     // drivetrainSubsystem, armSubsystem));
+
+    joystick.button(12).whileTrue(new TargetAndShootCommand(drivetrainSubsystem, armSubsystem, shooterSubsystem, visionSubsystem)); // ARM DOWN
   }
 
   private void configureCommands() {
-    drivetrainSubsystem.setDefaultCommand(new DynamicDriveCommand(drivetrainSubsystem, joystick::getY, joystick::getZ));
+    drivetrainSubsystem.setDefaultCommand(new DynamicDriveCommand(drivetrainSubsystem, joystick::getY, joystick::getZ, () -> joystick.getRawAxis(3)));
   }
 
   private void configureDashboard() {
     // ... (dashboard configuration)
+     
+
   }
 
   public Command getAutonomousCommand() {
@@ -64,5 +79,4 @@ public class RobotContainer {
     return Autos.hayalGucunuKullan(drivetrainSubsystem);
   }
 
-  
 }

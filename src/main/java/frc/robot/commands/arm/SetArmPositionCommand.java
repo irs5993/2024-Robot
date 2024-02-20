@@ -8,29 +8,32 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class SetArmPositionCommand extends PIDCommand {
   public SetArmPositionCommand(ArmSubsystem armSubsystem, DoubleSupplier positionSupplier) {
     super(
         // The controller that the command will use
-        new PIDController(7.5, 0, 0),
+        new PIDController(7, 0.08, 0.75),
         // This should return the measurement
         armSubsystem::getEncoderAbsolutePosition,
         // This should return the setpoint (can also be a constant)
         positionSupplier::getAsDouble,
         // This uses the output
         output -> {
-          SmartDashboard.putNumber("pid output", output);
-                    SmartDashboard.putNumber("pos in", positionSupplier.getAsDouble());
 
-          armSubsystem.setMotorSpeed(MathUtil.clamp(output, -0.45, 0.45));
+          SmartDashboard.putNumber("PID Output", output);
+
+          armSubsystem.setMotorSpeed(MathUtil.clamp(output, -0.5, 0.5));
         });
-        addRequirements(armSubsystem);
-        
-        // Configure additional PID options by calling `getController` here.
+    addRequirements(armSubsystem);
+
+    // Configure additional PID options by calling `getController` here.
   }
 
   // Returns true when the command should end.

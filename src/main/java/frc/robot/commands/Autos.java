@@ -12,8 +12,8 @@ public final class Autos {
    public static Command hayalGucunuKullan(DrivetrainSubsystem drivetrainSubsystem) {
     return Commands.sequence(
       
-    new DynamicDriveCommand(drivetrainSubsystem, () -> 0.2, () -> -0.1).withTimeout(1.5),
-    new DynamicDriveCommand(drivetrainSubsystem, () -> -0.3, () -> 0.2).withTimeout(3)
+    new DynamicDriveCommand(drivetrainSubsystem, () -> 0.2, () -> -0.1, () -> 0).withTimeout(1.5),
+    new DynamicDriveCommand(drivetrainSubsystem, () -> -0.3, () -> 0.2, () -> 0).withTimeout(3)
     );
   } 
 
