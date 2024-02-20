@@ -6,11 +6,13 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants.DriverPorts;
 
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -20,23 +22,22 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private final PWMVictorSPX rightMotor;
 
   private final DifferentialDrive driveBase;
-  private final AHRS gyro;
+  private final AHRS gyro;  
+  
+  public DrivetrainSubsystem() {
+    leftMotor = new PWMVictorSPX(DriverPorts.CHASIS_LEFT);
+    rightMotor = new PWMVictorSPX(DriverPorts.CHASIS_RIGHT);
+    rightMotor.setInverted(true);
+    
+    driveBase = new DifferentialDrive(leftMotor, rightMotor);
+    gyro = new AHRS(SPI.Port.kMXP);
+  }
   
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Yaw", getYaw());
     SmartDashboard.putNumber("Pitch", getPitch());
-  }
-
-  public DrivetrainSubsystem() {
-
-    leftMotor = new PWMVictorSPX(DriverPorts.CHASIS_LEFT);
-    rightMotor = new PWMVictorSPX(DriverPorts.CHASIS_RIGHT);
-    rightMotor.setInverted(true);
-
-    driveBase = new DifferentialDrive(leftMotor, rightMotor);
-    gyro = new AHRS(SPI.Port.kMXP);
   }
 
   public void drive(double xSpeed, double zRotation) {

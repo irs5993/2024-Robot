@@ -2,9 +2,11 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.CenterTargetCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.TargetAndShootCommand;
 import frc.robot.commands.arm.SetArmPositionCommand;
+import frc.robot.commands.drive.TurnAngleCommand;
 import frc.robot.helpers.RMath;
 import frc.robot.commands.DynamicDriveCommand;
 import frc.robot.commands.MoveArmCommand;
@@ -21,6 +23,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -45,23 +48,22 @@ public class RobotContainer {
     joystick.trigger().whileTrue(new ShootCommand(shooterSubsystem, () -> joystick.getRawAxis(3)));
 
     joystick.button(6).whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.5)); // TAKE IN
-    joystick.button(4).whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.5)); // PUSH OUT
+    joystick.button(7).whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.5)); // PUSH OUT
 
-    joystick.button(5).whileTrue(new MoveArmCommand(armSubsystem, 0.2)); // ARM UP
-    joystick.button(3).whileTrue(new MoveArmCommand(armSubsystem, -0.2)); // ARM DOWN
-
+    joystick.button(13).whileTrue(new MoveArmCommand(armSubsystem, 0.2)); // ARM UP
+    joystick.button(12).whileTrue(new MoveArmCommand(armSubsystem, -0.2)); // ARM DOWN
     
-    joystick.button(9)
-        .onTrue(new SetArmPositionCommand(armSubsystem, () -> 0.015));
-         joystick.button(10)
+    joystick.button(15)
+        .onTrue(new SetArmPositionCommand(armSubsystem, () -> 0.011));
+         joystick.button(14)
         .onTrue(new SetArmPositionCommand(armSubsystem, () -> 0.2));
 
-    joystick.button(11)
+    joystick.button(3)
         .whileTrue(new SetArmPositionCommand(armSubsystem, () -> RMath.map(joystick.getRawAxis(3), 1, -1, 0.004, 0.2)));
-    // joystick.button(7).whileTrue(new TargetAndShootCommand(visionSubsystem,
-    // drivetrainSubsystem, armSubsystem));
 
-    joystick.button(12).whileTrue(new TargetAndShootCommand(drivetrainSubsystem, armSubsystem, shooterSubsystem, visionSubsystem)); // ARM DOWN
+          joystick.button(16).whileTrue(new CenterTargetCommand(drivetrainSubsystem, visionSubsystem, Constants.Vision.PIPELINE_APRILTAG));
+
+    // joystick.button(12).whileTrue(new TargetAndShootCommand(drivetrainSubsystem, armSubsystem, shooterSubsystem, visionSubsystem)); // ARM DOWN
   }
 
   private void configureCommands() {

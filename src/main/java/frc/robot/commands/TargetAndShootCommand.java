@@ -20,7 +20,7 @@ import frc.robot.subsystems.VisionSubsystem;
     public TargetAndShootCommand(DrivetrainSubsystem drivetrainSubsystem, ArmSubsystem armSubsystem, ShooterSubsystem shooterSubsystem, VisionSubsystem visionSubsystem) {
       addCommands(
         new ParallelCommandGroup(
-          new TurnAngleCommand(drivetrainSubsystem, 0),
+          new TurnAngleCommand(drivetrainSubsystem, () -> 0),
           new SetArmPositionCommand(armSubsystem, () -> 0)
         )
       );

@@ -9,6 +9,10 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
+  public static class Vision {
+    public static final int PIPELINE_APRILTAG = 0;
+  }
+
   public static class DriverPorts {
     public static final int CHASIS_LEFT = 2;
     public static final int CHASIS_RIGHT = 1;
@@ -31,4 +35,6 @@ public final class Constants {
     public static final int ARM_LEFT = 4;
     public static final int ARM_ENCODER = 10;
   }
+
+
 }
