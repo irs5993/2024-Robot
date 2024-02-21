@@ -12,11 +12,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class SetArmPositionCommand extends PIDCommand {
-  public SetArmPositionCommand(ArmSubsystem armSubsystem, DoubleSupplier positionSupplier) {
+public class SetArmPositionLongRangeCommand extends PIDCommand {
+  public SetArmPositionLongRangeCommand(ArmSubsystem armSubsystem, DoubleSupplier positionSupplier) {
     super(
         // The controller that the command will use
-        new PIDController(5, 0, 0.2),
+        new PIDController(7, 0.08, 0.75),
         // This should return the measurement
         armSubsystem::getEncoderAbsolutePosition,
         // This should return the setpoint (can also be a constant)

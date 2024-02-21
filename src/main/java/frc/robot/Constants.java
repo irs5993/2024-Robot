@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+
 public final class Constants {
   public static class OperatorConstants {
     public static final int JOYSTICK_PORT = 0;
@@ -30,11 +31,10 @@ public final class Constants {
   public static class CANIDS {
     public static final int SHOOTER_LEFT = 6;
     public static final int SHOOTER_RIGHT = 5;
-    
+
     public static final int ARM_RIGHT = 3;
     public static final int ARM_LEFT = 4;
     public static final int ARM_ENCODER = 10;
   }
-
 
 }
