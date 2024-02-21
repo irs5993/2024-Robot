@@ -4,9 +4,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.CenterTargetCommand;
 import frc.robot.commands.ShootCommand;
-import frc.robot.commands.TargetAndShootCommand;
 import frc.robot.commands.arm.SetArmPositionCommand;
-import frc.robot.commands.drive.TurnAngleCommand;
 import frc.robot.helpers.RMath;
 import frc.robot.commands.DynamicDriveCommand;
 import frc.robot.commands.MoveArmCommand;
@@ -17,15 +15,6 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
-import org.photonvision.PhotonUtils;
-import org.photonvision.targeting.PhotonTrackedTarget;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
