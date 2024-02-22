@@ -2,6 +2,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.CenterTargetCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.TargetAndShootCommand;
 import frc.robot.commands.arm.AdjustArmVisionCommand;
@@ -50,8 +51,8 @@ public class RobotContainer {
     joystick.button(4)
         .whileTrue(new SetArmPositionCommand(armSubsystem, () -> RMath.map(joystick.getRawAxis(3), 1, -1, 0.004, 0.2)));
 
-    joystick.button(3).onTrue(new TargetAndShootCommand(drivetrainSubsystem, armSubsystem, shooterSubsystem,
-        visionSubsystem));
+    joystick.button(3).whileTrue(new CenterTargetCommand(drivetrainSubsystem, visionSubsystem)
+        .andThen(new AdjustArmVisionCommand(armSubsystem, visionSubsystem)));
 
     joystick.button(16)
         .whileTrue(new AdjustArmVisionCommand(armSubsystem, visionSubsystem));

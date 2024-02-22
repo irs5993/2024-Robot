@@ -14,16 +14,14 @@ public class CenterTargetCommand extends Command {
   private final VisionSubsystem visionSubsystem;
   private final DrivetrainSubsystem drivetrainSubsystem;
 
-  private final double MAX_OUT = 0.6;
+  private final double MAX_OUT = 0.5;
   private final PIDController pid = new PIDController(0.05, 0, 0.01);
 
-  public CenterTargetCommand(DrivetrainSubsystem drivetrainSubsystem, VisionSubsystem visionSubsystem,
-      int pipelineIndex) {
+  public CenterTargetCommand(DrivetrainSubsystem drivetrainSubsystem, VisionSubsystem visionSubsystem) {
+    addRequirements(drivetrainSubsystem);
+
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.visionSubsystem = visionSubsystem;
-    addRequirements(visionSubsystem, drivetrainSubsystem);
-
-    visionSubsystem.setPipelineIndex(pipelineIndex);
 
     pid.setTolerance(3);
     pid.enableContinuousInput(-180, 180);

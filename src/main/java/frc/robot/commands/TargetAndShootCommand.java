@@ -12,7 +12,7 @@ public class TargetAndShootCommand extends SequentialCommandGroup {
   public TargetAndShootCommand(DrivetrainSubsystem drivetrainSubsystem, ArmSubsystem armSubsystem,
       ShooterSubsystem shooterSubsystem, VisionSubsystem visionSubsystem) {
     addCommands(
-        new CenterTargetCommand(drivetrainSubsystem, visionSubsystem, Constants.Vision.PIPELINE_APRILTAG),
+        new CenterTargetCommand(drivetrainSubsystem, visionSubsystem),
         new AdjustArmVisionCommand(armSubsystem, visionSubsystem));
   }
 }
