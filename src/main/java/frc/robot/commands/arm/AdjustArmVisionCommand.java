@@ -16,9 +16,14 @@ import frc.robot.subsystems.VisionSubsystem;
 public class AdjustArmVisionCommand extends Command {
   private final ArmSubsystem armSubsystem;
   private final VisionSubsystem visionSubsystem;
+  private Command armPositionCommand;
+  private double latestAngle = 45;
 
   public AdjustArmVisionCommand(ArmSubsystem armSubsystem, VisionSubsystem visionSubsystem) {
     addRequirements(visionSubsystem);
+
+    this.armPositionCommand = new SetArmPositionOTGCommand(armSubsystem,
+        () -> armSubsystem.angleToEncoderPosition(computeAngle().getAsDouble()));
 
     this.armSubsystem = armSubsystem;
     this.visionSubsystem = visionSubsystem;
@@ -27,9 +32,8 @@ public class AdjustArmVisionCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    CommandScheduler.getInstance()
-        .schedule(new SetArmPositionOTGCommand(armSubsystem,
-            () -> armSubsystem.angleToEncoderPosition(computeAngle().getAsDouble())));
+    System.out.println("STARTED RUNNING ADJUST");
+    CommandScheduler.getInstance().schedule(armPositionCommand);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,7 +41,7 @@ public class AdjustArmVisionCommand extends Command {
 
     var bestTarget = visionSubsystem.getBestTarget();
     if (bestTarget == null) {
-      return () -> 2;
+      return () -> latestAngle;
     }
 
     double armAngle = armSubsystem.getAngle();
@@ -53,6 +57,7 @@ public class AdjustArmVisionCommand extends Command {
     SmartDashboard.putNumber("angle", angle.getAsDouble());
     SmartDashboard.putNumber("encoder pos", armSubsystem.angleToEncoderPosition(angle.getAsDouble()));
 
+    latestAngle = angle.getAsDouble();
     return angle;
 
   }
@@ -60,6 +65,7 @@ public class AdjustArmVisionCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    CommandScheduler.getInstance().cancel(armPositionCommand);
   }
 
   // Returns true when the command should end.
