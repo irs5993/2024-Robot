@@ -5,11 +5,10 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.TargetAndShootCommand;
 import frc.robot.commands.arm.AdjustArmVisionCommand;
+import frc.robot.commands.arm.MoveArmCommand;
 import frc.robot.commands.arm.SetArmPositionCommand;
-import frc.robot.commands.arm.SetArmPositionLongRangeCommand;
 import frc.robot.helpers.RMath;
 import frc.robot.commands.DynamicDriveCommand;
-import frc.robot.commands.MoveArmCommand;
 import frc.robot.commands.RunConveyorCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ConveyorSubsystem;
@@ -44,9 +43,9 @@ public class RobotContainer {
     joystick.button(12).whileTrue(new MoveArmCommand(armSubsystem, -0.2)); // ARM DOWN
 
     joystick.button(15)
-        .onTrue(new SetArmPositionLongRangeCommand(armSubsystem, () -> 0.011));
+        .onTrue(new SetArmPositionCommand(armSubsystem, () -> 0.011));
     joystick.button(14)
-        .onTrue(new SetArmPositionLongRangeCommand(armSubsystem, () -> 0.2));
+        .onTrue(new SetArmPositionCommand(armSubsystem, () -> 0.2));
 
     joystick.button(4)
         .whileTrue(new SetArmPositionCommand(armSubsystem, () -> RMath.map(joystick.getRawAxis(3), 1, -1, 0.004, 0.2)));

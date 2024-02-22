@@ -6,34 +6,40 @@ package frc.robot.commands.arm;
 
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class SetArmPositionCommand extends PIDCommand {
+public class SetArmPositionCommand extends Command {
+  private final ArmSubsystem armSubsystem;
+  private final DoubleSupplier positionSupplier;
+
   public SetArmPositionCommand(ArmSubsystem armSubsystem, DoubleSupplier positionSupplier) {
-    super(
-        // The controller that the command will use
-        new PIDController(5, 0, 0.2),
-        // This should return the measurement
-        armSubsystem::getAbsolutePosition,
-        // This should return the setpoint (can also be a constant)
-        positionSupplier::getAsDouble,
-        // This uses the output
-        output -> {
-          SmartDashboard.putNumber("PID Output", output);
-          armSubsystem.setMotorSpeed(MathUtil.clamp(output, -0.5, 0.5));
-        });
     addRequirements(armSubsystem);
 
-    // Configure additional PID options by calling `getController` here.
+    this.armSubsystem = armSubsystem;
+    this.positionSupplier = positionSupplier;
+  }
+
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    armSubsystem.resetController();
+  }
+
+  @Override
+  public void execute() {
+    armSubsystem.setPosition(positionSupplier.getAsDouble());
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    armSubsystem.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return armSubsystem.controllerAtSetpoint();
   }
 }

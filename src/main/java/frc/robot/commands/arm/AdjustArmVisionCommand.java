@@ -25,8 +25,10 @@ public class AdjustArmVisionCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    armSubsystem.resetController();
   }
 
+  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double desiredAngle = computeAngle();
@@ -35,12 +37,9 @@ public class AdjustArmVisionCommand extends Command {
     SmartDashboard.putNumber("Desired Angle", desiredAngle);
 
     double desiredPosition = armSubsystem.angleToPosition(desiredAngle);
-
-    armSubsystem.resetController();
     armSubsystem.setPosition(desiredPosition);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   public double computeAngle() {
     var bestTarget = visionSubsystem.getBestTarget();
     if (bestTarget == null) {
