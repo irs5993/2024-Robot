@@ -18,7 +18,7 @@ public class SetArmPositionOTGCommand extends PIDCommand {
         // The controller that the command will use
         new PIDController(5, 0.1, 0.9),
         // This should return the measurement
-        armSubsystem::getEncoderAbsolutePosition,
+        armSubsystem::getAbsolutePosition,
         // This should return the setpoint (can also be a constant)
         positionSupplier::getAsDouble,
         // This uses the output

@@ -18,7 +18,7 @@ public class SetArmPositionLongRangeCommand extends PIDCommand {
         // The controller that the command will use
         new PIDController(7, 0.08, 0.75),
         // This should return the measurement
-        armSubsystem::getEncoderAbsolutePosition,
+        armSubsystem::getAbsolutePosition,
         // This should return the setpoint (can also be a constant)
         positionSupplier::getAsDouble,
         // This uses the output

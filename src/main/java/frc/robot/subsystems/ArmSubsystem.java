@@ -7,7 +7,6 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -16,8 +15,8 @@ public class ArmSubsystem extends SubsystemBase {
     private final CANSparkMax rightMotor;
     private final CANcoder encoder;
 
-    private static final double ARM_MIN = 0.004;
-    private static final double ARM_MAX = 0.2;
+    private static final double MIN_POSITION = 0.004;
+    private static final double MAX_POSITION = 0.2;
 
     public ArmSubsystem() {
         leftMotor = new CANSparkMax(CANIDS.ARM_LEFT, MotorType.kBrushless);
@@ -26,7 +25,7 @@ public class ArmSubsystem extends SubsystemBase {
         encoder = new CANcoder(CANIDS.ARM_ENCODER);
     }
 
-    public double getEncoderAbsolutePosition() {
+    public double getAbsolutePosition() {
         // Return the current position of the arm from the encoder
         double value = encoder.getAbsolutePosition().getValueAsDouble();
 
@@ -38,22 +37,22 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public double getAngle() {
-        return encoderPositionToAngle(getEncoderAbsolutePosition());
+        return positionToAngle(getAbsolutePosition());
     }
 
-    public double encoderPositionToAngle(double position) {
-        return RMath.map(position, ARM_MIN, ARM_MAX, 0, 90);
+    public double positionToAngle(double position) {
+        return RMath.map(position, MIN_POSITION, MAX_POSITION, 0, 90);
 
     }
 
-    public double angleToEncoderPosition(double angle) {
-        return RMath.map(angle, 0, 90, ARM_MIN, ARM_MAX);
+    public double angleToPosition(double angle) {
+        return RMath.map(angle, 0, 90, MIN_POSITION, MAX_POSITION);
 
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Arm Encoder Value", getEncoderAbsolutePosition());
+        SmartDashboard.putNumber("Arm Position", getAbsolutePosition());
         SmartDashboard.putNumber("Arm Angle", getAngle());
 
     }
@@ -65,11 +64,11 @@ public class ArmSubsystem extends SubsystemBase {
         }
         // System.out.println(speed);
 
-        if (speed < 0 && getEncoderAbsolutePosition() < ARM_MIN) {
+        if (speed < 0 && getAbsolutePosition() < MIN_POSITION) {
             stop();
             return;
         }
-        if (speed > 0 && getEncoderAbsolutePosition() > ARM_MAX) {
+        if (speed > 0 && getAbsolutePosition() > MAX_POSITION) {
             stop();
             return;
         }

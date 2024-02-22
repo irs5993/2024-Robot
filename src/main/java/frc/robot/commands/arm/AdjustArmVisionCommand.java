@@ -22,7 +22,7 @@ public class AdjustArmVisionCommand extends Command {
     addRequirements(visionSubsystem);
 
     this.armPositionCommand = new SetArmPositionOTGCommand(armSubsystem,
-        () -> armSubsystem.angleToEncoderPosition(computeAngle().getAsDouble()));
+        () -> armSubsystem.angleToPosition(computeAngle().getAsDouble()));
 
     this.armSubsystem = armSubsystem;
     this.visionSubsystem = visionSubsystem;
@@ -54,7 +54,7 @@ public class AdjustArmVisionCommand extends Command {
     SmartDashboard.putNumber("h", h);
     SmartDashboard.putNumber("d", d);
     SmartDashboard.putNumber("angle", angle.getAsDouble());
-    SmartDashboard.putNumber("encoder pos", armSubsystem.angleToEncoderPosition(angle.getAsDouble()));
+    SmartDashboard.putNumber("encoder pos", armSubsystem.angleToPosition(angle.getAsDouble()));
 
     latestAngle = angle.getAsDouble();
     return angle;
