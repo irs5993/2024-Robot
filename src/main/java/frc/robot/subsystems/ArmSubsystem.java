@@ -7,6 +7,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -15,14 +16,65 @@ public class ArmSubsystem extends SubsystemBase {
     private final CANSparkMax rightMotor;
     private final CANcoder encoder;
 
+    private static final double MAX_VOLTAGE = 0.75;
     private static final double MIN_POSITION = 0.004;
     private static final double MAX_POSITION = 0.2;
+    private static final double CONTROLLER_TOLERANCE = 0.001;
+
+    private final PIDController controller;
 
     public ArmSubsystem() {
         leftMotor = new CANSparkMax(CANIDS.ARM_LEFT, MotorType.kBrushless);
         rightMotor = new CANSparkMax(CANIDS.ARM_RIGHT, MotorType.kBrushless);
 
         encoder = new CANcoder(CANIDS.ARM_ENCODER);
+
+        controller = new PIDController(5, 0, 0.2);
+        controller.setTolerance(CONTROLLER_TOLERANCE);
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Arm Position", getAbsolutePosition());
+        SmartDashboard.putNumber("Arm Angle", getAngle());
+    }
+
+    public void setMotorSpeed(double speed) {
+        if (Math.abs(speed) > MAX_VOLTAGE) {
+            stop();
+            return;
+        }
+
+        double position = getAbsolutePosition();
+
+        if (speed < 0 && position < MIN_POSITION) {
+            stop();
+            return;
+        }
+        if (speed > 0 && position > MAX_POSITION) {
+            stop();
+            return;
+        }
+
+        leftMotor.set(speed);
+        rightMotor.set(-speed);
+    }
+
+    public void setPosition(double position) {
+        double speed = controller.calculate(getAbsolutePosition(), position);
+        setMotorSpeed(speed);
+    }
+
+    public void resetController() {
+        controller.reset();
+    }
+
+    public boolean controllerAtSetpoint() {
+        return controller.atSetpoint();
+    }
+
+    public void setControllerPID(double kP, double kI, double kD) {
+        controller.setPID(kP, kI, kD);
     }
 
     public double getAbsolutePosition() {
@@ -42,39 +94,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     public double positionToAngle(double position) {
         return RMath.map(position, MIN_POSITION, MAX_POSITION, 0, 90);
-
     }
 
     public double angleToPosition(double angle) {
         return RMath.map(angle, 0, 90, MIN_POSITION, MAX_POSITION);
-
-    }
-
-    @Override
-    public void periodic() {
-        SmartDashboard.putNumber("Arm Position", getAbsolutePosition());
-        SmartDashboard.putNumber("Arm Angle", getAngle());
-
-    }
-
-    public void setMotorSpeed(double speed) {
-        if (Math.abs(speed) > 0.75) {
-            stop();
-            return;
-        }
-        // System.out.println(speed);
-
-        if (speed < 0 && getAbsolutePosition() < MIN_POSITION) {
-            stop();
-            return;
-        }
-        if (speed > 0 && getAbsolutePosition() > MAX_POSITION) {
-            stop();
-            return;
-        }
-
-        leftMotor.set(speed);
-        rightMotor.set(-speed);
     }
 
     public void stop() {
