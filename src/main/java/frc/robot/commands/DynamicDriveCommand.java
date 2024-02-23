@@ -17,8 +17,8 @@ public class DynamicDriveCommand extends Command {
   private final DoubleSupplier xSpeedSupplier, zRotationSupplier, multiplierSupplier;
 
   /** Creates a new DynamicDriveCommand. */
-  public DynamicDriveCommand(DrivetrainSubsystem drivetrainSubsystem, DoubleSupplier xSpeedSupplier, DoubleSupplier zRotationSupplier, DoubleSupplier multiplierSupplier) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public DynamicDriveCommand(DrivetrainSubsystem drivetrainSubsystem, DoubleSupplier xSpeedSupplier,
+      DoubleSupplier zRotationSupplier, DoubleSupplier multiplierSupplier) {
     this.drivetrainSubsystem = drivetrainSubsystem;
     addRequirements(drivetrainSubsystem);
 
@@ -29,7 +29,8 @@ public class DynamicDriveCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

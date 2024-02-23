@@ -4,8 +4,6 @@
 
 package frc.robot.commands.arm;
 
-import java.util.List;
-
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

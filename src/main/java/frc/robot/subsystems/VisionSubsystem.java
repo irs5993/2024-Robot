@@ -13,10 +13,8 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 public class VisionSubsystem extends SubsystemBase {
   public PhotonCamera camera;
@@ -100,10 +98,4 @@ public class VisionSubsystem extends SubsystemBase {
         CAMERA_PITCH_RADIANS,
         Units.degreesToRadians(target.getPitch()));
   }
-
-  // public Optional<EstimatedRobotPose> gEstimatedGlobalPose(Pose2d
-  // prevEstimatedRobotPose) {
-  // photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
-  // return photonPoseEstimator.update();
-  // }
 }

@@ -20,20 +20,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private final PWMVictorSPX rightMotor;
 
   private final DifferentialDrive driveBase;
-  private final AHRS gyro;  
-  
+  private final AHRS gyro;
+
   public DrivetrainSubsystem() {
     leftMotor = new PWMVictorSPX(DriverPorts.CHASIS_LEFT);
     rightMotor = new PWMVictorSPX(DriverPorts.CHASIS_RIGHT);
     rightMotor.setInverted(true);
-    
+
     driveBase = new DifferentialDrive(leftMotor, rightMotor);
     gyro = new AHRS(SPI.Port.kMXP);
+    gyro.reset();
   }
-  
+
+  // This method will be called once per scheduler run
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
     SmartDashboard.putNumber("Yaw", getYaw());
     SmartDashboard.putNumber("Pitch", getPitch());
   }

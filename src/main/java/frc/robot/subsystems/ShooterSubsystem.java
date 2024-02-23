@@ -19,11 +19,6 @@ public class ShooterSubsystem extends SubsystemBase {
     rightMotor = new CANSparkMax(CANIDS.SHOOTER_RIGHT, MotorType.kBrushless);
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
-
   public void setShooterSpeed(double speed) {
     setLeftMotorSpeed(speed);
     setRightMotorSpeed(speed);
