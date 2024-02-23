@@ -4,6 +4,10 @@
 
 package frc.robot.commands.arm;
 
+import java.util.List;
+
+import org.photonvision.targeting.PhotonTrackedTarget;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
@@ -32,7 +36,16 @@ public class AdjustArmVisionCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double desiredAngle = computeAngle();
+    var targets = visionSubsystem.getTargets();
+    PhotonTrackedTarget target = null;
+
+    for (int i = 0; i < targets.size(); i++) {
+      if (targets.get(i).getFiducialId() == 4 || targets.get(i).getFiducialId() == 7) {
+        target = targets.get(i);
+      }
+    }
+
+    double desiredAngle = computeAngle(target);
     latestAngle = desiredAngle;
 
     SmartDashboard.putNumber("Desired Angle", desiredAngle);
@@ -41,9 +54,8 @@ public class AdjustArmVisionCommand extends Command {
     armSubsystem.setPosition(desiredPosition);
   }
 
-  public double computeAngle() {
-    var bestTarget = visionSubsystem.getBestTarget();
-    if (bestTarget == null) {
+  public double computeAngle(PhotonTrackedTarget target) {
+    if (target == null) {
       return latestAngle;
     }
 
@@ -51,7 +63,7 @@ public class AdjustArmVisionCommand extends Command {
 
     double h = 1.77 - 0.6 * Math.sin(Math.toRadians(currentAngle));
     double d = 0.12 + 0.6 * Math.cos(Math.toRadians(currentAngle)) + (visionSubsystem
-        .getTargetDistance(bestTarget, visionSubsystem.SPEAKER_APRILTAG_HEIGHT_METERS));
+        .getTargetDistance(target, visionSubsystem.SPEAKER_APRILTAG_HEIGHT_METERS));
 
     double angle = 90 - (Math.toDegrees(Math.atan(h / d)) + 28.5);
 

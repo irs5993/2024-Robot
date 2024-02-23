@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.photonvision.PhotonCamera;
@@ -42,10 +43,6 @@ public class VisionSubsystem extends SubsystemBase {
   public void periodic() {
     List<PhotonTrackedTarget> targets = getTargets();
 
-    if (targets == null) {
-      return;
-    }
-
     if (!targets.isEmpty()) {
       // Create a list to store target distances
       double[] targetDistances = new double[targets.size()];
@@ -79,7 +76,7 @@ public class VisionSubsystem extends SubsystemBase {
 
   public List<PhotonTrackedTarget> getTargets() {
     if (!camera.isConnected()) {
-      return null;
+      return Collections.emptyList();
     }
     return getLatestResult().getTargets();
   }
