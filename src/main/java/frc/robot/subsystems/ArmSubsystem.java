@@ -7,6 +7,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,6 +23,9 @@ public class ArmSubsystem extends SubsystemBase {
     private static final double CONTROLLER_TOLERANCE = 0.001;
 
     private final PIDController controller;
+    private final double DEFAULT_P = 5;
+    private final double DEFAULT_I = 0;
+    private final double DEFAULT_D = 0.2;
 
     public ArmSubsystem() {
         leftMotor = new CANSparkMax(CANIDS.ARM_LEFT, MotorType.kBrushless);
@@ -29,7 +33,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         encoder = new CANcoder(CANIDS.ARM_ENCODER);
 
-        controller = new PIDController(5, 0, 0.2);
+        controller = new PIDController(DEFAULT_P, DEFAULT_I, DEFAULT_D);
         controller.setTolerance(CONTROLLER_TOLERANCE);
     }
 
@@ -61,12 +65,16 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setPosition(double position) {
-        double speed = controller.calculate(getAbsolutePosition(), position);
+        double raw = controller.calculate(getAbsolutePosition(), position);
+        double speed = MathUtil.clamp(raw, -0.3, 0.65);
         setMotorSpeed(speed);
+
+        SmartDashboard.putNumber("Arm PID Output", speed);
     }
 
     public void resetController() {
         controller.reset();
+        controller.setPID(DEFAULT_P, DEFAULT_I, DEFAULT_D);
     }
 
     public boolean controllerAtSetpoint() {

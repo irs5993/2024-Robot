@@ -19,7 +19,6 @@ import frc.robot.Constants;
 
 public class VisionSubsystem extends SubsystemBase {
   public PhotonCamera camera;
-  private final Servo servo;
 
   public final double CAMERA_HEIGHT_METERS = 0.22; // Camera height on robot
   public final double SPEAKER_APRILTAG_HEIGHT_METERS = 1.55; // AprilTag height
@@ -37,7 +36,6 @@ public class VisionSubsystem extends SubsystemBase {
 
   public VisionSubsystem() {
     camera = new PhotonCamera("main");
-    servo = new Servo(Constants.DriverPorts.CAMERA_SERVO);
   }
 
   @Override
@@ -60,23 +58,32 @@ public class VisionSubsystem extends SubsystemBase {
     }
   }
 
-  public void setServoAngle(double angle) {
-    servo.setAngle(angle);
-  }
-
   public void setPipelineIndex(int index) {
+    if (!camera.isConnected()) {
+      return;
+    }
     camera.setPipelineIndex(index);
   }
 
   public PhotonPipelineResult getLatestResult() {
+    if (!camera.isConnected()) {
+      return null;
+    }
     return camera.getLatestResult();
   }
 
   public List<PhotonTrackedTarget> getTargets() {
+    if (!camera.isConnected()) {
+      return null;
+    }
     return getLatestResult().getTargets();
   }
 
   public PhotonTrackedTarget getBestTarget() {
+    if (!camera.isConnected()) {
+      return null;
+    }
+
     var result = getLatestResult();
     if (result.hasTargets()) {
       return result.getBestTarget();

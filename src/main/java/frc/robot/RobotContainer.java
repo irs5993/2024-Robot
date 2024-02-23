@@ -17,6 +17,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
 public class RobotContainer {
@@ -51,8 +52,9 @@ public class RobotContainer {
     joystick.button(4)
         .whileTrue(new SetArmPositionCommand(armSubsystem, () -> RMath.map(joystick.getRawAxis(3), 1, -1, 0.004, 0.2)));
 
-    joystick.button(3).whileTrue(new CenterTargetCommand(drivetrainSubsystem, visionSubsystem)
-        .andThen(new AdjustArmVisionCommand(armSubsystem, visionSubsystem)));
+    joystick.button(3).whileTrue(new SequentialCommandGroup(
+        new CenterTargetCommand(drivetrainSubsystem, visionSubsystem),
+        new AdjustArmVisionCommand(armSubsystem, visionSubsystem)));
 
     joystick.button(16)
         .whileTrue(new AdjustArmVisionCommand(armSubsystem, visionSubsystem));
