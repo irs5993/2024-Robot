@@ -41,6 +41,14 @@ public class ArmSubsystem extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Arm Position", getAbsolutePosition());
         SmartDashboard.putNumber("Arm Angle", getAngle());
+
+        if (getAbsolutePosition() < MIN_POSITION) {
+            setPosition(MIN_POSITION);
+        }
+
+        if (getAbsolutePosition() > MAX_POSITION) {
+            stop();
+        }
     }
 
     public void setMotorSpeed(double speed) {
@@ -52,11 +60,9 @@ public class ArmSubsystem extends SubsystemBase {
         double position = getAbsolutePosition();
 
         if (speed < 0 && position < MIN_POSITION) {
-            stop();
             return;
         }
         if (speed > 0 && position > MAX_POSITION) {
-            stop();
             return;
         }
 

@@ -42,6 +42,10 @@ public class VisionSubsystem extends SubsystemBase {
   public void periodic() {
     List<PhotonTrackedTarget> targets = getTargets();
 
+    if (targets == null) {
+      return;
+    }
+
     if (!targets.isEmpty()) {
       // Create a list to store target distances
       double[] targetDistances = new double[targets.size()];
@@ -56,6 +60,7 @@ public class VisionSubsystem extends SubsystemBase {
       // Display the list of target distances on SmartDashboard
       SmartDashboard.putNumberArray("Target Distances", targetDistances);
     }
+
   }
 
   public void setPipelineIndex(int index) {

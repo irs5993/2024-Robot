@@ -23,7 +23,7 @@ public class CenterTargetCommand extends Command {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.visionSubsystem = visionSubsystem;
 
-    pid.setTolerance(3);
+    pid.setTolerance(1);
     pid.enableContinuousInput(-180, 180);
   }
 

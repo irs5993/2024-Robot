@@ -45,16 +45,15 @@ public class RobotContainer {
     joystick.button(12).whileTrue(new MoveArmCommand(armSubsystem, -0.2)); // ARM DOWN
 
     joystick.button(15)
-        .onTrue(new SetArmPositionCommand(armSubsystem, () -> 0.011));
+        .onTrue(new SetArmPositionCommand(armSubsystem, () -> 0.004));
     joystick.button(14)
-        .onTrue(new SetArmPositionCommand(armSubsystem, () -> 0.2));
+        .onTrue(new SetArmPositionCommand(armSubsystem, () -> 0.17));
 
     joystick.button(4)
         .whileTrue(new SetArmPositionCommand(armSubsystem, () -> RMath.map(joystick.getRawAxis(3), 1, -1, 0.004, 0.2)));
 
-    joystick.button(3).whileTrue(new SequentialCommandGroup(
-        new CenterTargetCommand(drivetrainSubsystem, visionSubsystem),
-        new AdjustArmVisionCommand(armSubsystem, visionSubsystem)));
+    joystick.button(3).whileTrue(new CenterTargetCommand(drivetrainSubsystem, visionSubsystem)
+        .alongWith(new AdjustArmVisionCommand(armSubsystem, visionSubsystem)));
 
     joystick.button(16)
         .whileTrue(new AdjustArmVisionCommand(armSubsystem, visionSubsystem));
