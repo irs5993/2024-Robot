@@ -10,26 +10,31 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShootCommand extends Command {
- 
   private final ShooterSubsystem shooterSubsystem;
-  private final DoubleSupplier speedSupplier;
 
-  public ShootCommand(ShooterSubsystem shooterSubsystem, DoubleSupplier speedSupplier) {
+  private final DoubleSupplier topSpeedSupplier;
+  private final DoubleSupplier bottomSpeedSupplier;
+
+  public ShootCommand(ShooterSubsystem shooterSubsystem, DoubleSupplier bottomSpeedSupplier,
+      DoubleSupplier topSpeedSupplier) {
     addRequirements(shooterSubsystem);
 
     this.shooterSubsystem = shooterSubsystem;
-    this.speedSupplier = speedSupplier;
+
+    this.topSpeedSupplier = topSpeedSupplier;
+    this.bottomSpeedSupplier = bottomSpeedSupplier;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println(speedSupplier.getAsDouble());
-    this.shooterSubsystem.setShooterSpeed(speedSupplier.getAsDouble());
+    this.shooterSubsystem.setTopMotorSpeed(topSpeedSupplier.getAsDouble());
+    this.shooterSubsystem.setBottomMotorSpeed(bottomSpeedSupplier.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

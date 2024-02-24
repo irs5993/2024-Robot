@@ -11,29 +11,29 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class ShooterSubsystem extends SubsystemBase {
-  private final CANSparkMax leftMotor;
-  private final CANSparkMax rightMotor;
+  private final CANSparkMax topMotor;
+  private final CANSparkMax bottomMotor;
 
   public ShooterSubsystem() {
-    leftMotor = new CANSparkMax(CANIDS.SHOOTER_LEFT, MotorType.kBrushless);
-    rightMotor = new CANSparkMax(CANIDS.SHOOTER_RIGHT, MotorType.kBrushless);
+    topMotor = new CANSparkMax(CANIDS.SHOOTER_TOP, MotorType.kBrushless);
+    bottomMotor = new CANSparkMax(CANIDS.SHOOTER_BOTTOM, MotorType.kBrushless);
   }
 
   public void setShooterSpeed(double speed) {
-    setLeftMotorSpeed(speed);
-    setRightMotorSpeed(speed);
+    setTopMotorSpeed(speed);
+    setBottomMotorSpeed(speed);
   }
 
-  public void setLeftMotorSpeed(double speed) {
-    leftMotor.set(speed);
+  public void setTopMotorSpeed(double speed) {
+    topMotor.set(speed);
   }
 
-  public void setRightMotorSpeed(double speed) {
-    rightMotor.set(speed);
+  public void setBottomMotorSpeed(double speed) {
+    bottomMotor.set(speed);
   }
 
   public void stop() {
-    leftMotor.stopMotor();
-    rightMotor.stopMotor();
+    topMotor.stopMotor();
+    bottomMotor.stopMotor();
   }
 }

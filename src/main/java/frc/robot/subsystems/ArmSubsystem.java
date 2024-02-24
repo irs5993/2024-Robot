@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import frc.robot.Constants;
 import frc.robot.Constants.CANIDS;
 import frc.robot.helpers.RMath;
 
@@ -17,11 +18,6 @@ public class ArmSubsystem extends SubsystemBase {
     private final CANSparkMax rightMotor;
     private final CANcoder encoder;
 
-    private static final double MAX_VOLTAGE = 0.75;
-    private static final double MIN_POSITION = 0.004;
-    private static final double MAX_POSITION = 0.2;
-    private static final double CONTROLLER_TOLERANCE = 0.001;
-
     private final PIDController controller;
     private final double DEFAULT_P = 5;
     private final double DEFAULT_I = 0;
@@ -34,7 +30,7 @@ public class ArmSubsystem extends SubsystemBase {
         encoder = new CANcoder(CANIDS.ARM_ENCODER);
 
         controller = new PIDController(DEFAULT_P, DEFAULT_I, DEFAULT_D);
-        controller.setTolerance(CONTROLLER_TOLERANCE);
+        controller.setTolerance(Constants.Arm.CONTROLLER_TOLERANCE);
     }
 
     @Override
@@ -42,27 +38,27 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Arm Position", getAbsolutePosition());
         SmartDashboard.putNumber("Arm Angle", getAngle());
 
-        if (getAbsolutePosition() < MIN_POSITION) {
-            setPosition(MIN_POSITION);
+        if (getAbsolutePosition() < Constants.Arm.MIN_POSITION) {
+            setPosition(Constants.Arm.MIN_POSITION);
         }
 
-        if (getAbsolutePosition() > MAX_POSITION) {
+        if (getAbsolutePosition() > Constants.Arm.MAX_POSITION) {
             stop();
         }
     }
 
     public void setMotorSpeed(double speed) {
-        if (Math.abs(speed) > MAX_VOLTAGE) {
+        if (Math.abs(speed) > Constants.Arm.SAFETY_MAX_VOLTAGE) {
             stop();
             return;
         }
 
         double position = getAbsolutePosition();
 
-        if (speed < 0 && position < MIN_POSITION) {
+        if (speed < 0 && position < Constants.Arm.MIN_POSITION) {
             return;
         }
-        if (speed > 0 && position > MAX_POSITION) {
+        if (speed > 0 && position > Constants.Arm.MAX_POSITION) {
             return;
         }
 
@@ -107,11 +103,11 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public double positionToAngle(double position) {
-        return RMath.map(position, MIN_POSITION, MAX_POSITION, 0, 90);
+        return RMath.map(position, Constants.Arm.MIN_POSITION, Constants.Arm.MAX_POSITION, 0, 90);
     }
 
     public double angleToPosition(double angle) {
-        return RMath.map(angle, 0, 90, MIN_POSITION, MAX_POSITION);
+        return RMath.map(angle, 0, 90, Constants.Arm.MIN_POSITION, Constants.Arm.MAX_POSITION);
     }
 
     public void stop() {

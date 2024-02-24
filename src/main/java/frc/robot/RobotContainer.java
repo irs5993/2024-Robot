@@ -35,24 +35,29 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    joystick.trigger().whileTrue(new ShootCommand(shooterSubsystem, () -> 0.6));
+    joystick.trigger().whileTrue(new ShootCommand(shooterSubsystem, () -> 0.6, () -> 0.6)); // SHOOT OUT
 
-    joystick.button(6).whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.5)); // TAKE IN
-    joystick.button(7).whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.5)); // PUSH OUT
+    joystick.button(12).whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.5)); // TAKE IN
+    joystick.button(13).whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.5)); // PUSH OUT
 
-    joystick.button(13).whileTrue(new MoveArmCommand(armSubsystem, 0.2)); // ARM UP
-    joystick.button(12).whileTrue(new MoveArmCommand(armSubsystem, -0.2)); // ARM DOWN
-
-    joystick.povUp().whileTrue(new StepArmCommand(armSubsystem, 0.5));
-    joystick.povDown().whileTrue(new StepArmCommand(armSubsystem, -0.4));
+    joystick.povUp().whileTrue(new StepArmCommand(armSubsystem, 0.5)); // ARM UP
+    joystick.povDown().whileTrue(new StepArmCommand(armSubsystem, -0.4)); // ARM DOWN
 
     joystick.button(3).whileTrue(new CenterTargetCommand(drivetrainSubsystem, visionSubsystem)
         .alongWith(new AdjustArmVisionCommand(armSubsystem, visionSubsystem)));
 
+    // Arm Presets
+    // ---------------------------------------------------------------------
+    joystick.button(14)
+        .onTrue(new SetArmPositionCommand(armSubsystem, () -> 0.165));
     joystick.button(15)
         .onTrue(new SetArmPositionCommand(armSubsystem, () -> 0.004));
-    joystick.button(14)
-        .onTrue(new SetArmPositionCommand(armSubsystem, () -> 0.17));
+    joystick.button(16)
+        .onTrue(new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.DEFAULT_SHOOT_POSITION));
+    // ---------------------------------------------------------------------
+
+    // joystick.button(13).whileTrue(new MoveArmCommand(armSubsystem, 0.2));
+    // joystick.button(12).whileTrue(new MoveArmCommand(armSubsystem, -0.2));
 
     // joystick.button(16)
     // .whileTrue(new AdjustArmVisionCommand(armSubsystem, visionSubsystem));
