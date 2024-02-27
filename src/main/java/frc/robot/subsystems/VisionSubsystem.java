@@ -24,15 +24,6 @@ public class VisionSubsystem extends SubsystemBase {
   public final double SUB_RANGE_METERS = 0.95; // Subwoofer range through the field
   public final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(45); // Camera angle on robot
 
-  // Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
-  // new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of
-  // center, half a meter up from center.
-  // AprilTagFieldLayout aprilTagFieldLayout =
-  // AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-  // PhotonPoseEstimator photonPoseEstimator = new
-  // PhotonPoseEstimator(aprilTagFieldLayout,
-  // PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, robotToCam);
-
   public VisionSubsystem() {
     camera = new PhotonCamera("main");
   }
