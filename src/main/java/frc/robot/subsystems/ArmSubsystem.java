@@ -38,8 +38,8 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Arm Position", getAbsolutePosition());
         SmartDashboard.putNumber("Arm Angle", getAngle());
 
-        if (getAbsolutePosition() < Constants.Arm.MIN_POSITION) {
-            setPosition(Constants.Arm.MIN_POSITION);
+        if (getAbsolutePosition() <= Constants.Arm.MIN_POSITION) {
+            setPosition(Constants.Arm.MIN_POSITION + 0.001);
         }
 
         if (getAbsolutePosition() > Constants.Arm.MAX_POSITION) {
@@ -55,7 +55,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         double position = getAbsolutePosition();
 
-        if (speed < 0 && position < Constants.Arm.MIN_POSITION) {
+        if (speed < 0 && position <= Constants.Arm.MIN_POSITION) {
             return;
         }
         if (speed > 0 && position > Constants.Arm.MAX_POSITION) {

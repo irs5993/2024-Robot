@@ -17,6 +17,8 @@ import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
@@ -29,6 +31,7 @@ public class RobotContainer {
   private final ConveyorSubsystem conveyorSubsystem = new ConveyorSubsystem();
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
   private final VisionSubsystem visionSubsystem = new VisionSubsystem();
+
 
   public RobotContainer() {
     configureBindings();

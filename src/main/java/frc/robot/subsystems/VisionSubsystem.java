@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class VisionSubsystem extends SubsystemBase {
   public PhotonCamera camera;
 
-  public final double CAMERA_HEIGHT_METERS = 0.22; // Camera height on robot
+  public final double CAMERA_HEIGHT_METERS = 0.225; // Camera height on robot
   public final double SPEAKER_APRILTAG_HEIGHT_METERS = 1.55; // AprilTag height
   public final double SUB_RANGE_METERS = 0.95; // Subwoofer range through the field
   public final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(45); // Camera angle on robot

@@ -35,7 +35,7 @@ public final class Constants {
     public static final int CHASIS_LEFT = 2;
     public static final int CHASIS_RIGHT = 1;
 
-    public static final int CONVEYOR = 7;
+    public static final int CONVEYOR = 0;
   }
 
   public static class CANIDS {
