@@ -23,7 +23,6 @@ public class StepArmCommand extends Command {
   @Override
   public void initialize() {
     armSubsystem.resetController();
-    armSubsystem.setControllerPID(10, 0.28, 0);
 
     angle = armSubsystem.getAngle();
   }

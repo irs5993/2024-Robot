@@ -15,7 +15,7 @@ public class AdjustArmVisionCommand extends Command {
   private final ArmSubsystem armSubsystem;
   private final VisionSubsystem visionSubsystem;
 
-  private double latestAngle = 45;
+  private double latestAngle;
 
   public AdjustArmVisionCommand(ArmSubsystem armSubsystem, VisionSubsystem visionSubsystem) {
     addRequirements(armSubsystem);
@@ -28,7 +28,8 @@ public class AdjustArmVisionCommand extends Command {
   @Override
   public void initialize() {
     armSubsystem.resetController();
-    armSubsystem.setControllerPID(10, 0.28, 0);
+
+    latestAngle = armSubsystem.getAngle();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

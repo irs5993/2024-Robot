@@ -19,9 +19,12 @@ public class ArmSubsystem extends SubsystemBase {
     private final CANcoder encoder;
 
     private final PIDController controller;
-    private final double DEFAULT_P = 5;
-    private final double DEFAULT_I = 0;
-    private final double DEFAULT_D = 0.2;
+
+    private final double DEFAULT_P = 10;
+    private final double DEFAULT_I = 0.28;
+    private final double DEFAULT_D = 0;
+
+    // Alternative slower PID values: 5, 0, 0.2
 
     public ArmSubsystem() {
         leftMotor = new CANSparkMax(CANIDS.ARM_LEFT, MotorType.kBrushless);
@@ -72,6 +75,7 @@ public class ArmSubsystem extends SubsystemBase {
         setMotorSpeed(speed);
 
         SmartDashboard.putNumber("Arm PID Output", speed);
+        SmartDashboard.putNumber("Desired Position", position);
     }
 
     public void resetController() {

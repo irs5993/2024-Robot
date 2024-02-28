@@ -24,6 +24,7 @@ public class SetArmPositionCommand extends Command {
   @Override
   public void initialize() {
     armSubsystem.resetController();
+    armSubsystem.setControllerPID(5, 0, 0.2);
   }
 
   @Override

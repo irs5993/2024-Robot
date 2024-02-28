@@ -54,7 +54,7 @@ public class RobotContainer {
     // Arm Presets
     // ---------------------------------------------------------------------
     joystick.button(14)
-        .onTrue(new SetArmPositionCommand(armSubsystem, () -> 0.165));
+        .onTrue(new SetArmPositionCommand(armSubsystem, () -> 0.15));
     joystick.button(15)
         .onTrue(new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.MIN_POSITION));
     joystick.button(16)
