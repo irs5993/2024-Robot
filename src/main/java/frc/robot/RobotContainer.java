@@ -18,6 +18,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
 public class RobotContainer {
@@ -28,7 +29,6 @@ public class RobotContainer {
   private final ConveyorSubsystem conveyorSubsystem = new ConveyorSubsystem();
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
   private final VisionSubsystem visionSubsystem = new VisionSubsystem();
-
 
   public RobotContainer() {
     configureBindings();
@@ -42,8 +42,10 @@ public class RobotContainer {
     joystick.button(12).whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.5)); // TAKE IN
     joystick.button(13).whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.5)); // PUSH OUT
 
-    joystick.povUp().whileTrue(new StepArmCommand(armSubsystem, 0.5)).whileFalse(new KeepArmPositionCommand(armSubsystem)); // ARM UP
-    joystick.povDown().whileTrue(new StepArmCommand(armSubsystem, -0.4)).whileFalse(new KeepArmPositionCommand(armSubsystem)); // ARM DOWN
+    joystick.povUp().whileTrue(new StepArmCommand(armSubsystem, 0.5))
+        .whileFalse(new KeepArmPositionCommand(armSubsystem)); // ARM UP
+    joystick.povDown().whileTrue(new StepArmCommand(armSubsystem, -0.4))
+        .whileFalse(new KeepArmPositionCommand(armSubsystem)); // ARM DOWN
 
     joystick.button(3).whileTrue(new CenterTargetCommand(drivetrainSubsystem, visionSubsystem)
         .alongWith(new AdjustArmVisionCommand(armSubsystem, visionSubsystem)));
@@ -82,7 +84,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // ... (autonomous command)
-    return Autos.hayalGucunuKullan(drivetrainSubsystem);
+    return new WaitCommand(2);
   }
 
 }

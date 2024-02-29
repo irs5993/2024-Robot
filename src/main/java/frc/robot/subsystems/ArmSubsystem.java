@@ -70,7 +70,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setPosition(double position) {
-        double raw = controller.calculate(getAbsolutePosition(), position);
+        double raw = controller.calculate(getAbsolutePosition(),
+                MathUtil.clamp(position, Constants.Arm.MIN_POSITION, Constants.Arm.MAX_POSITION));
         double speed = MathUtil.clamp(raw, -0.3, 0.65);
         setMotorSpeed(speed);
 
