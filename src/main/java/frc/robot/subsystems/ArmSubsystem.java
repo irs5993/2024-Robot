@@ -42,7 +42,7 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Arm Angle", getAngle());
 
         if (getAbsolutePosition() <= Constants.Arm.MIN_POSITION) {
-            setPosition(Constants.Arm.MIN_POSITION + 0.001);
+            setPosition(Constants.Arm.MIN_POSITION);
         }
 
         if (getAbsolutePosition() > Constants.Arm.MAX_POSITION) {

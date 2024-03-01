@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -23,7 +24,7 @@ public class CenterTargetCommand extends Command {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.visionSubsystem = visionSubsystem;
 
-    pid.setTolerance(1);
+    pid.setTolerance(0.1);
     pid.enableContinuousInput(-180, 180);
   }
 
@@ -33,10 +34,15 @@ public class CenterTargetCommand extends Command {
     double rotation = 0;
 
     if (target != null) {
-      rotation = MathUtil.clamp(-pid.calculate(target.getYaw()), -MAX_OUT, MAX_OUT);
+      rotation = MathUtil.clamp(-pid.calculate(target.getYaw(), 0), -MAX_OUT, MAX_OUT);
+      SmartDashboard.putNumber("CURRENT YAW", target.getYaw());
+
     }
 
     drivetrainSubsystem.drive(0, rotation);
+
+    SmartDashboard.putNumber("TARGET ROTATION", 0);
+
   }
 
   @Override

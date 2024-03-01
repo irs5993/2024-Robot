@@ -7,7 +7,7 @@ package frc.robot;
 public final class Constants {
   public static class Arm {
     public static final double MAX_POSITION = 0.2;
-    public static final double MIN_POSITION = 0.004;
+    public static final double MIN_POSITION = 0.003;
 
     // The position of the arm when the robot is touching it's
     // bumpers to the speaker
@@ -21,6 +21,8 @@ public final class Constants {
 
     // Hard limit on the arm motor voltages
     public static final double SAFETY_MAX_VOLTAGE = 0.75;
+
+    public static final double ANGLE_OFFSET = -2.5;
   }
 
   public static class OperatorConstants {

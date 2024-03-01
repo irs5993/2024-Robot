@@ -4,6 +4,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.CenterTargetCommand;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.ShootDistanceCommand;
 import frc.robot.commands.arm.AdjustArmVisionCommand;
 import frc.robot.commands.arm.KeepArmPositionCommand;
 import frc.robot.commands.arm.MoveArmCommand;
@@ -37,18 +38,23 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    joystick.trigger().whileTrue(new ShootCommand(shooterSubsystem, () -> 0.6, () -> 0.6)); // SHOOT OUT
+    joystick.trigger().whileTrue(
+        new ShootDistanceCommand(shooterSubsystem, visionSubsystem)); // SHOOT
+    // OUT
 
-    joystick.button(12).whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.5)); // TAKE IN
-    joystick.button(13).whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.5)); // PUSH OUT
+    joystick.button(12).whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.75)); // TAKE IN
+    joystick.button(13).whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.75)); // PUSH OUT
 
     joystick.povUp().whileTrue(new StepArmCommand(armSubsystem, 0.5))
         .whileFalse(new KeepArmPositionCommand(armSubsystem)); // ARM UP
     joystick.povDown().whileTrue(new StepArmCommand(armSubsystem, -0.4))
         .whileFalse(new KeepArmPositionCommand(armSubsystem)); // ARM DOWN
 
+    joystick.button(4).whileTrue(new CenterTargetCommand(drivetrainSubsystem, visionSubsystem));
+
     joystick.button(3).whileTrue(new CenterTargetCommand(drivetrainSubsystem, visionSubsystem)
-        .alongWith(new AdjustArmVisionCommand(armSubsystem, visionSubsystem)));
+        .alongWith(new AdjustArmVisionCommand(armSubsystem, visionSubsystem)))
+        .whileFalse(new KeepArmPositionCommand(armSubsystem));
 
     // Arm Presets
     // ---------------------------------------------------------------------

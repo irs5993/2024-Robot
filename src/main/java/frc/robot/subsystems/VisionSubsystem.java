@@ -15,14 +15,15 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.helpers.RMath;
 
 public class VisionSubsystem extends SubsystemBase {
   public PhotonCamera camera;
 
-  public final double CAMERA_HEIGHT_METERS = 0.225; // Camera height on robot
+  public final double CAMERA_HEIGHT_METERS = 0.235; // Camera height on robot
   public final double SPEAKER_APRILTAG_HEIGHT_METERS = 1.55; // AprilTag height
   public final double SUB_RANGE_METERS = 0.95; // Subwoofer range through the field
-  public final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(45); // Camera angle on robot
+  public final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(40.5); // Camera angle on robot
 
   public VisionSubsystem() {
     camera = new PhotonCamera("main");
@@ -80,6 +81,20 @@ public class VisionSubsystem extends SubsystemBase {
       return result.getBestTarget();
     }
     return null;
+  }
+
+  public PhotonTrackedTarget getSpeakerTarget() {
+    var targets = getTargets();
+    PhotonTrackedTarget target = null;
+
+    for (int i = 0; i < targets.size(); i++) {
+      if (targets.get(i).getFiducialId() == 4 || targets.get(i).getFiducialId() == 7) {
+        target = targets.get(i);
+        break;
+      }
+    }
+
+    return target;
   }
 
   public double getTargetDistance(PhotonTrackedTarget target, double targetHeightMeters) {

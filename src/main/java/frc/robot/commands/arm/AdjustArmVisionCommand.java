@@ -8,6 +8,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
@@ -41,6 +42,7 @@ public class AdjustArmVisionCommand extends Command {
     for (int i = 0; i < targets.size(); i++) {
       if (targets.get(i).getFiducialId() == 4 || targets.get(i).getFiducialId() == 7) {
         target = targets.get(i);
+        break;
       }
     }
 
@@ -66,7 +68,7 @@ public class AdjustArmVisionCommand extends Command {
 
     double angle = 90 - (Math.toDegrees(Math.atan(h / d)) + 28.5);
 
-    return angle;
+    return angle + Constants.Arm.ANGLE_OFFSET;
   }
 
   // Called once the command ends or is interrupted.
