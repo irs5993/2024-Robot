@@ -5,8 +5,11 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
-import frc.robot.commands.arm.AdjustArmVisionCommand;
+import frc.robot.commands.arm.CalculateArmVisionCommand;
 import frc.robot.commands.arm.SetArmPositionCommand;
+import frc.robot.commands.drive.CenterTargetCommand;
+import frc.robot.commands.drive.DynamicDriveCommand;
+import frc.robot.commands.shoot.ShootCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -22,7 +25,7 @@ public final class Autos {
     return Commands.sequence(
 
         new CenterTargetCommand(drivetrainSubsystem, visionSubsystem)
-            .alongWith(new AdjustArmVisionCommand(armSubsystem, visionSubsystem)),
+            .alongWith(new CalculateArmVisionCommand(armSubsystem, visionSubsystem)),
 
         new ShootCommand(shooterSubsystem, () -> 0.6, () -> 0.6).withTimeout(0.5),
 
@@ -36,7 +39,7 @@ public final class Autos {
         new DynamicDriveCommand(drivetrainSubsystem, () -> 0.35, () -> -0, () -> 0).withTimeout(1.5),
 
         new CenterTargetCommand(drivetrainSubsystem, visionSubsystem)
-            .alongWith(new AdjustArmVisionCommand(armSubsystem, visionSubsystem)),
+            .alongWith(new CalculateArmVisionCommand(armSubsystem, visionSubsystem)),
 
         new ShootCommand(shooterSubsystem, () -> 0.6, () -> 0.6)).withTimeout(0.84);
   }
