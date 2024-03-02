@@ -35,9 +35,10 @@ public class DynamicDriveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putNumber("Position Input", RMath.map(multiplierSupplier.getAsDouble(), 1, -1, 0.004, 0.2));
+    double xSpeed = xSpeedSupplier.getAsDouble() * multiplierSupplier.getAsDouble();
+    double zRotation = zRotationSupplier.getAsDouble() * multiplierSupplier.getAsDouble();
 
-    drivetrainSubsystem.drive(xSpeedSupplier.getAsDouble(), zRotationSupplier.getAsDouble());
+    drivetrainSubsystem.drive(xSpeed, zRotation);
   }
 
   // Called once the command ends or is interrupted.

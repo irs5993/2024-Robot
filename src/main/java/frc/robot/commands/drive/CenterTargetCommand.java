@@ -25,23 +25,23 @@ public class CenterTargetCommand extends Command {
     this.visionSubsystem = visionSubsystem;
 
     pid.setTolerance(0.1);
-    pid.enableContinuousInput(-180, 180);
+
+    SmartDashboard.putNumber("Center Target Desired Position", 0);
   }
 
   @Override
   public void execute() {
     var target = visionSubsystem.getSpeakerTarget();
-    double rotation = 0;
 
     if (target != null) {
-      rotation = MathUtil.clamp(-pid.calculate(target.getYaw(), 0), -MAX_OUT, MAX_OUT);
-      SmartDashboard.putNumber("CURRENT YAW", target.getYaw());
+      double rotation = MathUtil.clamp(-pid.calculate(target.getYaw(), 0), -MAX_OUT, MAX_OUT);
+      drivetrainSubsystem.drive(0, rotation);
 
+      SmartDashboard.putNumber("Center Target Current Yaw", target.getYaw());
+
+    } else {
+      drivetrainSubsystem.stop();
     }
-
-    drivetrainSubsystem.drive(0, rotation);
-
-    SmartDashboard.putNumber("TARGET ROTATION", 0);
 
   }
 

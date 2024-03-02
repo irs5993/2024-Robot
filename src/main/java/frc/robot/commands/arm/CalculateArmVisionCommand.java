@@ -12,13 +12,13 @@ import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
-public class AdjustArmVisionCommand extends Command {
+public class CalculateArmVisionCommand extends Command {
   private final ArmSubsystem armSubsystem;
   private final VisionSubsystem visionSubsystem;
 
   private double latestAngle;
 
-  public AdjustArmVisionCommand(ArmSubsystem armSubsystem, VisionSubsystem visionSubsystem) {
+  public CalculateArmVisionCommand(ArmSubsystem armSubsystem, VisionSubsystem visionSubsystem) {
     addRequirements(armSubsystem);
 
     this.armSubsystem = armSubsystem;
