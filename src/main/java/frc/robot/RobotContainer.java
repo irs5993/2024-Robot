@@ -1,20 +1,14 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
 import frc.robot.commands.CenterTargetCommand;
 import frc.robot.commands.ShootCommand;
-import frc.robot.commands.ShootDistanceCommand;
 import frc.robot.commands.ShootVelocityCommand;
-import frc.robot.commands.arm.AdjustArmVisionCommand;
 import frc.robot.commands.arm.KeepArmPositionCommand;
-import frc.robot.commands.arm.MoveArmCommand;
 import frc.robot.commands.arm.MoveArmVisionCommand;
 import frc.robot.commands.arm.SetArmPositionCommand;
 import frc.robot.commands.arm.StepArmCommand;
-import frc.robot.commands.drive.CenterNoteCommand;
 import frc.robot.commands.drive.DriveCenterNoteCommand;
-import frc.robot.helpers.RMath;
 import frc.robot.commands.DynamicDriveCommand;
 import frc.robot.commands.RunConveyorCommand;
 import frc.robot.subsystems.ArmSubsystem;
