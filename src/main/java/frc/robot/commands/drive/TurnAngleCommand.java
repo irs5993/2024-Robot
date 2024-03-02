@@ -25,7 +25,7 @@ public class TurnAngleCommand extends PIDCommand {
         output -> {
           drivetrainSubsystem.drive(0, MathUtil.clamp(output, -0.4, 0.7));
         });
-    
+
     addRequirements(drivetrainSubsystem);
 
     getController().setTolerance(2);
