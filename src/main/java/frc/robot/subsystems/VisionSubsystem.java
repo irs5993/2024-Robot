@@ -13,20 +13,23 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.helpers.RMath;
 
 public class VisionSubsystem extends SubsystemBase {
-  public PhotonCamera camera;
+  public PhotonCamera main_camera;
+  public PhotonCamera intake_camera;
 
   public final double CAMERA_HEIGHT_METERS = 0.235; // Camera height on robot
-  public final double SPEAKER_APRILTAG_HEIGHT_METERS = 1.55; // AprilTag height
+  public final double SPEAKER_APRILTAG_HEIGHT_METERS = 1.45; // AprilTag height
   public final double SUB_RANGE_METERS = 0.95; // Subwoofer range through the field
-  public final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(40.5); // Camera angle on robot
+  public final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(37); // Camera angle on robot
 
   public VisionSubsystem() {
-    camera = new PhotonCamera("main");
+    main_camera = new PhotonCamera("main");
+    intake_camera = new PhotonCamera("intake");
   }
 
   @Override
@@ -46,33 +49,57 @@ public class VisionSubsystem extends SubsystemBase {
 
       // Display the list of target distances on SmartDashboard
       SmartDashboard.putNumberArray("Target Distances", targetDistances);
+
     }
 
+    var SPEAKERT = getSpeakerTarget();
+    if (SPEAKERT != null) {
+      SmartDashboard.putNumber("DİST", getTargetDistance(SPEAKERT, SPEAKER_APRILTAG_HEIGHT_METERS));
+    }
+  }
+
+  public PhotonTrackedTarget getBestTargetIntake() {
+    if (!intake_camera.isConnected()) {
+      return null;
+    }
+
+    var result = getLatestResultIntake();
+    if (result.hasTargets()) {
+      return result.getBestTarget();
+    }
+    return null;
   }
 
   public void setPipelineIndex(int index) {
-    if (!camera.isConnected()) {
+    if (!main_camera.isConnected()) {
       return;
     }
-    camera.setPipelineIndex(index);
+    main_camera.setPipelineIndex(index);
   }
 
   public PhotonPipelineResult getLatestResult() {
-    if (!camera.isConnected()) {
+    if (!main_camera.isConnected()) {
       return null;
     }
-    return camera.getLatestResult();
+    return main_camera.getLatestResult();
+  }
+
+  public PhotonPipelineResult getLatestResultIntake() {
+    if (!intake_camera.isConnected()) {
+      return null;
+    }
+    return intake_camera.getLatestResult();
   }
 
   public List<PhotonTrackedTarget> getTargets() {
-    if (!camera.isConnected()) {
+    if (!main_camera.isConnected()) {
       return Collections.emptyList();
     }
     return getLatestResult().getTargets();
   }
 
   public PhotonTrackedTarget getBestTarget() {
-    if (!camera.isConnected()) {
+    if (!main_camera.isConnected()) {
       return null;
     }
 
@@ -88,7 +115,7 @@ public class VisionSubsystem extends SubsystemBase {
     PhotonTrackedTarget target = null;
 
     for (int i = 0; i < targets.size(); i++) {
-      if (targets.get(i).getFiducialId() == 4 || targets.get(i).getFiducialId() == 7) {
+      if (targets.get(i).getFiducialId() == 3 || targets.get(i).getFiducialId() == 7) {
         target = targets.get(i);
         break;
       }

@@ -5,11 +5,15 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.CenterTargetCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ShootDistanceCommand;
+import frc.robot.commands.ShootVelocityCommand;
 import frc.robot.commands.arm.AdjustArmVisionCommand;
 import frc.robot.commands.arm.KeepArmPositionCommand;
 import frc.robot.commands.arm.MoveArmCommand;
+import frc.robot.commands.arm.MoveArmVisionCommand;
 import frc.robot.commands.arm.SetArmPositionCommand;
 import frc.robot.commands.arm.StepArmCommand;
+import frc.robot.commands.drive.CenterNoteCommand;
+import frc.robot.commands.drive.DriveCenterNoteCommand;
 import frc.robot.helpers.RMath;
 import frc.robot.commands.DynamicDriveCommand;
 import frc.robot.commands.RunConveyorCommand;
@@ -23,74 +27,86 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
 public class RobotContainer {
-  private final CommandJoystick joystick = new CommandJoystick(OperatorConstants.JOYSTICK_PORT);
+    private final CommandJoystick joystick = new CommandJoystick(OperatorConstants.JOYSTICK_PORT);
 
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
-  private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
-  private final ConveyorSubsystem conveyorSubsystem = new ConveyorSubsystem();
-  private final ArmSubsystem armSubsystem = new ArmSubsystem();
-  private final VisionSubsystem visionSubsystem = new VisionSubsystem();
+    private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
+    private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+    private final ConveyorSubsystem conveyorSubsystem = new ConveyorSubsystem();
+    private final ArmSubsystem armSubsystem = new ArmSubsystem();
+    private final VisionSubsystem visionSubsystem = new VisionSubsystem();
 
-  public RobotContainer() {
-    configureBindings();
-    configureCommands();
-    configureDashboard();
-  }
+    public RobotContainer() {
+        configureBindings();
+        configureCommands();
+        configureDashboard();
+    }
 
-  private void configureBindings() {
-    joystick.trigger().whileTrue(
-        new ShootDistanceCommand(shooterSubsystem, visionSubsystem)); // SHOOT
-    // OUT
+    private void configureBindings() {
+        joystick.trigger().whileTrue(
+                new ShootVelocityCommand(shooterSubsystem, () -> 0.66, () -> 0.66)); // SHOOT
 
-    joystick.button(12).whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.75)); // TAKE IN
-    joystick.button(13).whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.75)); // PUSH OUT
+        joystick.button(2).whileTrue(
+                new ShootCommand(shooterSubsystem, () -> 0.15, () -> 0.15)
+                        .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.5))); // SHOOT
 
-    joystick.povUp().whileTrue(new StepArmCommand(armSubsystem, 0.5))
-        .whileFalse(new KeepArmPositionCommand(armSubsystem)); // ARM UP
-    joystick.povDown().whileTrue(new StepArmCommand(armSubsystem, -0.4))
-        .whileFalse(new KeepArmPositionCommand(armSubsystem)); // ARM DOWN
+        // OUT
 
-    joystick.button(4).whileTrue(new CenterTargetCommand(drivetrainSubsystem, visionSubsystem));
+        joystick.button(12).whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.8)); // PUSH OUT
+        joystick.button(13).whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.8)); // TAKE IN
 
-    joystick.button(3).whileTrue(new CenterTargetCommand(drivetrainSubsystem, visionSubsystem)
-        .alongWith(new AdjustArmVisionCommand(armSubsystem, visionSubsystem)))
-        .whileFalse(new KeepArmPositionCommand(armSubsystem));
+        joystick.povUp().whileTrue(new StepArmCommand(armSubsystem, 0.5))
+                .whileFalse(new KeepArmPositionCommand(armSubsystem)); // ARM UP
+        joystick.povDown().whileTrue(new StepArmCommand(armSubsystem, -0.4))
+                .whileFalse(new KeepArmPositionCommand(armSubsystem)); // ARM DOWN
 
-    // Arm Presets
-    // ---------------------------------------------------------------------
-    joystick.button(14)
-        .onTrue(new SetArmPositionCommand(armSubsystem, () -> 0.15));
-    joystick.button(15)
-        .onTrue(new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.MIN_POSITION));
-    joystick.button(16)
-        .onTrue(new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.DEFAULT_SHOOT_POSITION));
-    // ---------------------------------------------------------------------
+        joystick.button(4).whileTrue(new DriveCenterNoteCommand(drivetrainSubsystem, visionSubsystem)
+                .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.45)));
 
-    // joystick.button(13).whileTrue(new MoveArmCommand(armSubsystem, 0.2));
-    // joystick.button(12).whileTrue(new MoveArmCommand(armSubsystem, -0.2));
+        joystick.button(3).whileTrue(new CenterTargetCommand(drivetrainSubsystem, visionSubsystem)
+                .alongWith(new MoveArmVisionCommand(armSubsystem, visionSubsystem)))
+                .whileFalse(new KeepArmPositionCommand(armSubsystem));
 
-    // joystick.button(16)
-    // .whileTrue(new AdjustArmVisionCommand(armSubsystem, visionSubsystem));
+        // Arm Presets
+        // ---------------------------------------------------------------------
+        joystick.button(6)
+                .whileTrue(new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.HUMAN_POSITION)
+                        .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.5)));
+        joystick.button(7)
+                .onTrue(new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.MAX_POSITION));
+        joystick.button(14)
+                .onTrue(new SetArmPositionCommand(armSubsystem, () -> 0.15));
+        joystick.button(15)
+                .onTrue(new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.MIN_POSITION));
+        joystick.button(16)
+                .onTrue(new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.DEFAULT_SHOOT_POSITION));
+        // ---------------------------------------------------------------------
 
-    // joystick.button(4)
-    // .whileTrue(new SetArmPositionCommand(armSubsystem, () ->
-    // RMath.map(joystick.getRawAxis(3), 1, -1, 0.004, 0.2)));
+        // joystick.button(13).whileTrue(new MoveArmCommand(armSubsystem, 0.2));
+        // joystick.button(12).whileTrue(new MoveArmCommand(armSubsystem, -0.2));
 
-  }
+        // joystick.button(16)
+        // .whileTrue(new AdjustArmVisionCommand(armSubsystem, visionSubsystem));
 
-  private void configureCommands() {
-    drivetrainSubsystem.setDefaultCommand(
-        new DynamicDriveCommand(drivetrainSubsystem, joystick::getY, joystick::getZ, () -> joystick.getRawAxis(3)));
-  }
+        // joystick.button(4)
+        // .whileTrue(new SetArmPositionCommand(armSubsystem, () ->
+        // RMath.map(joystick.getRawAxis(3), 1, -1, 0.004, 0.2)));
 
-  private void configureDashboard() {
-    // ... (dashboard configuration)
+    }
 
-  }
+    private void configureCommands() {
+        drivetrainSubsystem.setDefaultCommand(
+                new DynamicDriveCommand(drivetrainSubsystem, joystick::getY, joystick::getZ,
+                        () -> joystick.getRawAxis(3)));
+    }
 
-  public Command getAutonomousCommand() {
-    // ... (autonomous command)
-    return new WaitCommand(2);
-  }
+    private void configureDashboard() {
+        // ... (dashboard configuration)
+
+    }
+
+    public Command getAutonomousCommand() {
+        // ... (autonomous command)
+        return new WaitCommand(2);
+    }
 
 }

@@ -6,12 +6,14 @@ package frc.robot;
 
 public final class Constants {
   public static class Arm {
-    public static final double MAX_POSITION = 0.2;
-    public static final double MIN_POSITION = 0.003;
+    public static final double MAX_POSITION = 0.24;
+    public static final double MIN_POSITION = 0.001;
+
+    public static final double HUMAN_POSITION = 0.137;
 
     // The position of the arm when the robot is touching it's
     // bumpers to the speaker
-    public static final double DEFAULT_SHOOT_POSITION = 0.05;
+    public static final double DEFAULT_SHOOT_POSITION = 0.021;
 
     // Determines when (or if) the arm position set by the PID loop is at it's
     // desired
@@ -22,7 +24,7 @@ public final class Constants {
     // Hard limit on the arm motor voltages
     public static final double SAFETY_MAX_VOLTAGE = 0.75;
 
-    public static final double ANGLE_OFFSET = -2.5;
+    public static final double ANGLE_OFFSET = -15;
   }
 
   public static class OperatorConstants {

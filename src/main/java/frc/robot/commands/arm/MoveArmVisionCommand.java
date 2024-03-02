@@ -8,16 +8,22 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.helpers.RMath;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
-public class KeepArmPositionCommand extends Command {
+public class MoveArmVisionCommand extends Command {
   private final ArmSubsystem armSubsystem;
-  private double targetPosition;
+  private final VisionSubsystem visionSubsystem;
 
-  public KeepArmPositionCommand(ArmSubsystem armSubsystem) {
+  private double latestPosition;
+
+  public MoveArmVisionCommand(ArmSubsystem armSubsystem, VisionSubsystem visionSubsystem) {
     addRequirements(armSubsystem);
 
     this.armSubsystem = armSubsystem;
+    this.visionSubsystem = visionSubsystem;
   }
 
   // Called when the command is initially scheduled.
@@ -25,13 +31,30 @@ public class KeepArmPositionCommand extends Command {
   public void initialize() {
     armSubsystem.resetController();
 
-    targetPosition = armSubsystem.getAbsolutePosition();
+    latestPosition = armSubsystem.getAbsolutePosition();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    armSubsystem.setPosition(targetPosition);
+    var target = visionSubsystem.getSpeakerTarget();
+    double currentPosition;
+
+    double position;
+    if (target == null) {
+      currentPosition = latestPosition;
+    } else {
+      currentPosition = target.getPitch();
+      latestPosition = currentPosition;
+    }
+
+    position = RMath.map(currentPosition, -20, 20, 0.068, 0.015);
+
+    // SmartDashboard.putNumber("Desired Angle", desiredAngle);
+
+    // double desiredPosition = armSubsystem.angleToPosition(desiredAngle);
+    armSubsystem.setPosition(position);
+    SmartDashboard.putNumber("AMOGUS POSITION", position);
   }
 
   // Called once the command ends or is interrupted.

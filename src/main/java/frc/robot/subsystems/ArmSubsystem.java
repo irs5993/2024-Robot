@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -20,10 +21,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     private final PIDController controller;
 
-    private final double DEFAULT_P = 10;
-    private final double DEFAULT_I = 0.28;
-    private final double DEFAULT_D = 0;
-
+    private final double DEFAULT_P = 11.6;
+    private final double DEFAULT_I = 0.0001;
+    private final double DEFAULT_D = 0.7;
+    LinearFilter filter = LinearFilter.singlePoleIIR(0.4, 0.02);
     // Alternative slower PID values: 5, 0, 0.2
 
     public ArmSubsystem() {
@@ -72,7 +73,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void setPosition(double position) {
         double raw = controller.calculate(getAbsolutePosition(),
                 MathUtil.clamp(position, Constants.Arm.MIN_POSITION, Constants.Arm.MAX_POSITION));
-        double speed = MathUtil.clamp(raw, -0.3, 0.65);
+        double speed = MathUtil.clamp(raw, -0.45, 0.65);
         setMotorSpeed(speed);
 
         SmartDashboard.putNumber("Arm PID Output", speed);
@@ -94,7 +95,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public double getAbsolutePosition() {
         // Return the current position of the arm from the encoder
-        double value = encoder.getAbsolutePosition().getValueAsDouble();
+        double value = filter.calculate(encoder.getAbsolutePosition().getValueAsDouble());
 
         if (value > 0.9) {
             value = 0;

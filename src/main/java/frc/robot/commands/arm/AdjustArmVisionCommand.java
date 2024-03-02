@@ -36,15 +36,7 @@ public class AdjustArmVisionCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    var targets = visionSubsystem.getTargets();
-    PhotonTrackedTarget target = null;
-
-    for (int i = 0; i < targets.size(); i++) {
-      if (targets.get(i).getFiducialId() == 4 || targets.get(i).getFiducialId() == 7) {
-        target = targets.get(i);
-        break;
-      }
-    }
+    var target = visionSubsystem.getSpeakerTarget();
 
     double desiredAngle = computeAngle(target);
     latestAngle = desiredAngle;
@@ -62,8 +54,8 @@ public class AdjustArmVisionCommand extends Command {
 
     double currentAngle = armSubsystem.getAngle();
 
-    double h = 1.77 - 0.6 * Math.sin(Math.toRadians(currentAngle));
-    double d = 0.12 + 0.6 * Math.cos(Math.toRadians(currentAngle)) + (visionSubsystem
+    double h = 1.825 - 0.6 * Math.sin(Math.toRadians(currentAngle));
+    double d = 0.135 + 0.6 * Math.cos(Math.toRadians(currentAngle)) + (visionSubsystem
         .getTargetDistance(target, visionSubsystem.SPEAKER_APRILTAG_HEIGHT_METERS));
 
     double angle = 90 - (Math.toDegrees(Math.atan(h / d)) + 28.5);
