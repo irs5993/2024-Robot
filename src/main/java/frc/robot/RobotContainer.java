@@ -2,6 +2,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.arm.KeepArmPositionCommand;
+import frc.robot.commands.arm.MoveArmCommand;
 import frc.robot.commands.arm.MoveArmVisionCommand;
 import frc.robot.commands.arm.SetArmPositionCommand;
 import frc.robot.commands.arm.StepArmCommand;
@@ -36,26 +37,39 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    // DESC - Run the shooter motors with the given velocity values
     joystick.trigger().whileTrue(
-        new ShootVelocityCommand(shooterSubsystem, () -> 0.66, () -> 0.66)); // SHOOT
+        new ShootVelocityCommand(shooterSubsystem, () -> 0.66, () -> 0.66));
 
+    // FOR - Scoring on the speaker
+    // DESC - Run the shooter motors slowly, while moving the game piece out
     joystick.button(2).whileTrue(
         new ShootCommand(shooterSubsystem, () -> 0.15, () -> 0.15)
-            .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.5))); // SHOOT
+            .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.5)));
 
-    // OUT
+    // FOR - Pushing the game piece out
+    joystick.button(12).whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.8));
+    // FOR - Taking the game piece in
+    joystick.button(13).whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.8));
 
-    joystick.button(12).whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.8)); // PUSH OUT
-    joystick.button(13).whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.8)); // TAKE IN
+    // FOR - Moving the arm upwards
+    // DESC - Increase the desired arm angle periodically, allowing for the PID
+    // controller to set the motor voltages automatically
+    joystick.povUp().whileTrue(new MoveArmCommand(armSubsystem, 0.3));
+    // FOR - Moving the arm downwards
+    // DESC - Decrease the desired arm angle periodically, allowing for the PID
+    // controller to set the motor voltages automatically
+    joystick.povDown().whileTrue(new MoveArmCommand(armSubsystem, -0.3));
 
-    joystick.povUp().whileTrue(new StepArmCommand(armSubsystem, 0.5))
-        .whileFalse(new KeepArmPositionCommand(armSubsystem)); // ARM UP
-    joystick.povDown().whileTrue(new StepArmCommand(armSubsystem, -0.4))
-        .whileFalse(new KeepArmPositionCommand(armSubsystem)); // ARM DOWN
-
+    // FOR - Automatically taking the game piece in
+    // DESC - Center the game piece horizontally on the camera while running the
+    // conveyor motors
     joystick.button(4).whileTrue(new DriveCenterNoteCommand(drivetrainSubsystem, visionSubsystem, 0.6)
         .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.45)));
 
+    // FOR - Aiming at the speaker
+    // DESC - Center the target horizontally on the camera while also adjusting the
+    // arm angle calculated by the target pitch
     joystick.button(3).whileTrue(new CenterTargetCommand(drivetrainSubsystem, visionSubsystem)
         .alongWith(new MoveArmVisionCommand(armSubsystem, visionSubsystem)))
         .whileFalse(new KeepArmPositionCommand(armSubsystem));

@@ -5,13 +5,19 @@
 package frc.robot;
 
 public final class Constants {
+  public static class Commands {
+
+  }
+
   public static class Arm {
+    // Position values for the arm movement limits
     public static final double MAX_POSITION = 0.24;
     public static final double MIN_POSITION = 0.001;
 
+    // The position of the arm for retrieving the game piece from the human player
     public static final double HUMAN_POSITION = 0.137;
 
-    // The position of the arm when the robot is touching it's
+    // The default shooting position of the arm when the robot is touching it's
     // bumpers to the speaker
     public static final double DEFAULT_SHOOT_POSITION = 0.021;
 
@@ -21,9 +27,12 @@ public final class Constants {
     // position updates
     public static final double CONTROLLER_TOLERANCE = 0.001;
 
-    // Hard limit on the arm motor voltages
+    // Hard limit on the arm motor voltages. If the all the software limits
+    // fail, this is the maximum voltage allowed on the motor controllers
     public static final double SAFETY_MAX_VOLTAGE = 0.75;
 
+    // Offset for the arm position calculation. DO NOT change this unless you are
+    // Arhan Burak Tüzün®™
     public static final double ANGLE_OFFSET = -15;
   }
 
