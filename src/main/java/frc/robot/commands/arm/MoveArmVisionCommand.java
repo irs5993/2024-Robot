@@ -45,11 +45,8 @@ public class MoveArmVisionCommand extends Command {
       latestPosition = currentPosition;
     }
 
-    position = RMath.map(currentPosition, -20, 20, 0.068, 0.015);
+    position = RMath.map(currentPosition, -16, 16, 0.074, 0.02);
 
-    // SmartDashboard.putNumber("Desired Angle", desiredAngle);
-
-    // double desiredPosition = armSubsystem.angleToPosition(desiredAngle);
     armSubsystem.setPosition(position);
     SmartDashboard.putNumber("AMOGUS POSITION", position);
   }

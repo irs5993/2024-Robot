@@ -113,7 +113,7 @@ public class VisionSubsystem extends SubsystemBase {
     PhotonTrackedTarget target = null;
 
     for (int i = 0; i < targets.size(); i++) {
-      if (targets.get(i).getFiducialId() == 3 || targets.get(i).getFiducialId() == 7) {
+      if (targets.get(i).getFiducialId() == 4 || targets.get(i).getFiducialId() == 7) {
         target = targets.get(i);
         break;
       }

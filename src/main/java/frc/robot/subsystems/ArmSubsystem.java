@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -24,14 +25,16 @@ public class ArmSubsystem extends SubsystemBase {
   private final double DEFAULT_P = 11.6;
   private final double DEFAULT_I = 0.0001;
   private final double DEFAULT_D = 0.7;
-  LinearFilter filter = LinearFilter.singlePoleIIR(0.4, 0.02);
   // Alternative slower PID values: 5, 0, 0.2
+
+  LinearFilter filter = LinearFilter.singlePoleIIR(0.4, 0.02);
 
   public ArmSubsystem() {
     leftMotor = new CANSparkMax(CANIDS.ARM_LEFT, MotorType.kBrushless);
     rightMotor = new CANSparkMax(CANIDS.ARM_RIGHT, MotorType.kBrushless);
 
     encoder = new CANcoder(CANIDS.ARM_ENCODER);
+    encoder.setPosition(encoder.getAbsolutePosition().getValueAsDouble());
 
     controller = new PIDController(DEFAULT_P, DEFAULT_I, DEFAULT_D);
     controller.setTolerance(Constants.Arm.CONTROLLER_TOLERANCE);
@@ -41,6 +44,8 @@ public class ArmSubsystem extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Arm Position", getAbsolutePosition());
     SmartDashboard.putNumber("Arm Angle", getAngle());
+    SmartDashboard.putNumber("Arm Pos Absolute Raw", encoder.getAbsolutePosition().getValueAsDouble());
+    SmartDashboard.putNumber("Arm Pos Raw", encoder.getPosition().getValueAsDouble());
 
     if (getAbsolutePosition() <= Constants.Arm.MIN_POSITION) {
       setPosition(Constants.Arm.MIN_POSITION);
@@ -95,13 +100,9 @@ public class ArmSubsystem extends SubsystemBase {
 
   public double getAbsolutePosition() {
     // Return the current position of the arm from the encoder
-    double value = filter.calculate(encoder.getAbsolutePosition().getValueAsDouble());
+    double value = encoder.getPosition().getValueAsDouble();
 
-    if (value > 0.9) {
-      value = 0;
-    }
-
-    return value;
+    return filter.calculate(value);
   }
 
   public double getAngle() {

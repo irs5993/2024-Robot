@@ -21,6 +21,7 @@ public class KeepArmPositionCommand extends Command {
   @Override
   public void initialize() {
     armSubsystem.resetController();
+    armSubsystem.setControllerPID(8, 0.1, 0.7);
 
     targetPosition = armSubsystem.getAbsolutePosition();
   }

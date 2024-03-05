@@ -16,7 +16,7 @@ public class CenterTargetCommand extends Command {
   private final DrivetrainSubsystem drivetrainSubsystem;
 
   private final double MAX_OUT = 0.8;
-  private final PIDController pid = new PIDController(0.1, 0.02, 0);
+  private final PIDController pid = new PIDController(0.12, 0.001, 0.01);
 
   public CenterTargetCommand(DrivetrainSubsystem drivetrainSubsystem, VisionSubsystem visionSubsystem) {
     addRequirements(drivetrainSubsystem);
@@ -24,8 +24,7 @@ public class CenterTargetCommand extends Command {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.visionSubsystem = visionSubsystem;
 
-    pid.setTolerance(0.1);
-
+    pid.setTolerance(0.5);
     SmartDashboard.putNumber("Center Target Desired Position", 0);
   }
 
@@ -35,6 +34,7 @@ public class CenterTargetCommand extends Command {
 
     if (target != null) {
       double rotation = MathUtil.clamp(-pid.calculate(target.getYaw(), 0), -MAX_OUT, MAX_OUT);
+
       drivetrainSubsystem.drive(0, rotation);
 
       SmartDashboard.putNumber("Center Target Current Yaw", target.getYaw());

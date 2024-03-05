@@ -4,6 +4,7 @@
 
 package frc.robot.commands.shoot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.helpers.RMath;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -13,8 +14,7 @@ public class ShootDistanceCommand extends Command {
   private final ShooterSubsystem shooterSubsystem;
   private final VisionSubsystem visionSubsystem;
 
-  private double topVelocity = 0.65;
-  private double bottomVelocity = 0.65;
+  private double latestPosition;
 
   public ShootDistanceCommand(ShooterSubsystem shooterSubsystem, VisionSubsystem visionSubsystem) {
     addRequirements(shooterSubsystem);
@@ -32,15 +32,23 @@ public class ShootDistanceCommand extends Command {
   @Override
   public void execute() {
     var target = visionSubsystem.getSpeakerTarget();
-    if (target != null) {
-      double distance = visionSubsystem.getTargetDistance(target, visionSubsystem.SPEAKER_APRILTAG_HEIGHT_METERS);
+    double currentPosition;
 
-      topVelocity = RMath.map(distance, 0.5, 3, 0.57, 0.8);
-      bottomVelocity = RMath.map(distance, 0.5, 3, 0.57, 0.85);
+    if (target == null) {
+      currentPosition = latestPosition;
+    } else {
+      currentPosition = target.getPitch();
+      latestPosition = currentPosition;
     }
+
+    double topVelocity = RMath.map(currentPosition, -20, 20, 0.69, 0.57);
+    double bottomVelocity = RMath.map(currentPosition, -20, 20, 0.75, 0.57);
 
     this.shooterSubsystem.setTopMotorVelocity(topVelocity);
     this.shooterSubsystem.setBottomMotorVelocity(bottomVelocity);
+
+    SmartDashboard.putNumber("Shoot Distance Bottom Velocity", bottomVelocity);
+    SmartDashboard.putNumber("Shoot Distance Top Velocity", topVelocity);
 
   }
 

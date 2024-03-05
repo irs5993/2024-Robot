@@ -11,15 +11,17 @@ public final class Constants {
 
   public static class Arm {
     // Position values for the arm movement limits
-    public static final double MAX_POSITION = 0.24;
+    public static final double MAX_POSITION = 0.207;
     public static final double MIN_POSITION = 0.001;
 
     // The position of the arm for retrieving the game piece from the human player
-    public static final double HUMAN_POSITION = 0.137;
+    public static final double HUMAN_POSITION = 0.141;
 
     // The default shooting position of the arm when the robot is touching it's
     // bumpers to the speaker
-    public static final double DEFAULT_SHOOT_POSITION = 0.021;
+    public static final double DEFAULT_SHOOT_POSITION = 0.035;
+
+    public static final double STAGE_SHOOT_POSITION = 0.074;
 
     // Determines when (or if) the arm position set by the PID loop is at it's
     // desired
