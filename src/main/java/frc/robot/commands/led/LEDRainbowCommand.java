@@ -9,27 +9,27 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LEDSubsystem;
 
-public class RainbowCommand extends Command {
+public class LEDRainbowCommand extends Command {
   private final LEDSubsystem ledSubsystem;
   private DoubleSupplier speedSupplier;
   private double position = 0;
   private int rainbowFirstPixelHue = 0; // Starting hue
 
-  public RainbowCommand(LEDSubsystem ledSubsystem) {
+  public LEDRainbowCommand(LEDSubsystem ledSubsystem) {
     addRequirements(ledSubsystem);
 
     this.ledSubsystem = ledSubsystem;
     this.speedSupplier = () -> 3;
   }
 
-  public RainbowCommand(LEDSubsystem ledSubsystem, double speed) {
+  public LEDRainbowCommand(LEDSubsystem ledSubsystem, double speed) {
     addRequirements(ledSubsystem);
 
     this.ledSubsystem = ledSubsystem;
     this.speedSupplier = () -> speed;
   }
 
-  public RainbowCommand(LEDSubsystem ledSubsystem, DoubleSupplier speedSupplier) {
+  public LEDRainbowCommand(LEDSubsystem ledSubsystem, DoubleSupplier speedSupplier) {
     addRequirements(ledSubsystem);
 
     this.ledSubsystem = ledSubsystem;
