@@ -12,6 +12,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -19,6 +20,7 @@ public class ArmSubsystem extends SubsystemBase {
   private final CANSparkMax leftMotor;
   private final CANSparkMax rightMotor;
   private final CANcoder encoder;
+  private final DigitalInput stopSwitch;
 
   private final PIDController controller;
 
@@ -36,16 +38,23 @@ public class ArmSubsystem extends SubsystemBase {
     encoder = new CANcoder(CANIDS.ARM_ENCODER);
     encoder.setPosition(encoder.getAbsolutePosition().getValueAsDouble());
 
+    stopSwitch = new DigitalInput(Constants.Arm.SWITCH_PORT);
+
     controller = new PIDController(DEFAULT_P, DEFAULT_I, DEFAULT_D);
     controller.setTolerance(Constants.Arm.CONTROLLER_TOLERANCE);
   }
 
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("Arm Stop Switch", stopSwitch.get());
     SmartDashboard.putNumber("Arm Position", getAbsolutePosition());
     SmartDashboard.putNumber("Arm Angle", getAngle());
     SmartDashboard.putNumber("Arm Pos Absolute Raw", encoder.getAbsolutePosition().getValueAsDouble());
     SmartDashboard.putNumber("Arm Pos Raw", encoder.getPosition().getValueAsDouble());
+
+    if (stopSwitch.get()) {
+      encoder.setPosition(0);
+    }
 
     if (getAbsolutePosition() <= Constants.Arm.MIN_POSITION) {
       setPosition(Constants.Arm.MIN_POSITION);
@@ -64,7 +73,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     double position = getAbsolutePosition();
 
-    if (speed < 0 && position <= Constants.Arm.MIN_POSITION) {
+    if ((speed < 0 && position <= Constants.Arm.MIN_POSITION) || (speed < 0 && stopSwitch.get())) {
       return;
     }
     if (speed > 0 && position > Constants.Arm.MAX_POSITION) {

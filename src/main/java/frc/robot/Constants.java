@@ -12,7 +12,7 @@ public final class Constants {
   public static class Arm {
     // Position values for the arm movement limits
     public static final double MAX_POSITION = 0.207;
-    public static final double MIN_POSITION = 0.001;
+    public static final double MIN_POSITION = 0;
 
     // The position of the arm for retrieving the game piece from the human player
     public static final double HUMAN_POSITION = 0.141;
@@ -36,6 +36,8 @@ public final class Constants {
     // Offset for the arm position calculation. DO NOT change this unless you are
     // Arhan Burak Tüzün®™
     public static final double ANGLE_OFFSET = -15;
+
+    public static final int SWITCH_PORT = 0;
   }
 
   public static class OperatorConstants {
