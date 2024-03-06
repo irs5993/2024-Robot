@@ -14,7 +14,7 @@ public class CenterNoteCommand extends Command {
   private final VisionSubsystem visionSubsystem;
   private final DrivetrainSubsystem drivetrainSubsystem;
 
-  private final double MAX_OUT = 0.8;
+  private final double MAX_OUT = 0.5;
   private final PIDController pid = new PIDController(0.08, 0.02, 0);
 
   public CenterNoteCommand(DrivetrainSubsystem drivetrainSubsystem, VisionSubsystem visionSubsystem) {
@@ -31,7 +31,7 @@ public class CenterNoteCommand extends Command {
     var target = visionSubsystem.getBestTargetIntake();
 
     if (target != null) {
-      double rotation = MathUtil.clamp(-pid.calculate(target.getYaw(), 0), -MAX_OUT, MAX_OUT);
+      double rotation = MathUtil.clamp(-pid.calculate(target.getYaw(), 1.5), -MAX_OUT, MAX_OUT);
       drivetrainSubsystem.drive(0, rotation);
     } else {
       drivetrainSubsystem.stop();

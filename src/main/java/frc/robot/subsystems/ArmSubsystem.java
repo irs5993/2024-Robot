@@ -24,6 +24,8 @@ public class ArmSubsystem extends SubsystemBase {
 
   private final PIDController controller;
 
+  private boolean doneReset = false;
+
   private final double DEFAULT_P = 11.6;
   private final double DEFAULT_I = 0.0001;
   private final double DEFAULT_D = 0.7;
@@ -46,14 +48,18 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("Arm Done Reset", doneReset);
     SmartDashboard.putBoolean("Arm Stop Switch", stopSwitch.get());
     SmartDashboard.putNumber("Arm Position", getAbsolutePosition());
     SmartDashboard.putNumber("Arm Angle", getAngle());
     SmartDashboard.putNumber("Arm Pos Absolute Raw", encoder.getAbsolutePosition().getValueAsDouble());
     SmartDashboard.putNumber("Arm Pos Raw", encoder.getPosition().getValueAsDouble());
 
-    if (stopSwitch.get()) {
-      encoder.setPosition(0);
+    if (!doneReset) {
+      if (stopSwitch.get()) {
+        encoder.setPosition(0);
+        doneReset = true;
+      }
     }
 
     if (getAbsolutePosition() <= Constants.Arm.MIN_POSITION) {
@@ -74,6 +80,7 @@ public class ArmSubsystem extends SubsystemBase {
     double position = getAbsolutePosition();
 
     if ((speed < 0 && position <= Constants.Arm.MIN_POSITION) || (speed < 0 && stopSwitch.get())) {
+      stop();
       return;
     }
     if (speed > 0 && position > Constants.Arm.MAX_POSITION) {

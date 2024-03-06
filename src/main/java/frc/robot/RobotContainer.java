@@ -26,6 +26,7 @@ import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
@@ -79,7 +80,7 @@ public class RobotContainer {
     // DESC - Center the game piece horizontally on the camera while running the
     // conveyor motors
     joystick.button(4).whileTrue(new DriveCenterNoteCommand(drivetrainSubsystem, visionSubsystem, 0.6)
-        .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.55)));
+        .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.35)));
 
     // FOR - Aiming at the speaker
     // DESC - Center the target horizontally on the camera while also adjusting the
@@ -125,15 +126,23 @@ public class RobotContainer {
 
     armSubsystem.setDefaultCommand(new KeepArmPositionCommand(armSubsystem));
 
-    ledSubsystem.setDefaultCommand(new LEDRainbowCommand(ledSubsystem, 5));
+    ledSubsystem.setDefaultCommand(Commands.run(() -> {
+      if (visionSubsystem.getSpeakerTarget() != null) {
+        ledSubsystem.setRGB(0, 0, 255);
+      } else if (visionSubsystem.getBestTargetIntake() != null) {
+        ledSubsystem.setRGB(255, 20, 0);
+      } else {
+        ledSubsystem.rainbow();
+      }
+    }, ledSubsystem));
 
-    autoChooser.addOption("Center",
+    autoChooser.setDefaultOption("Center",
         Autos.CenterAuto(drivetrainSubsystem, visionSubsystem, armSubsystem, shooterSubsystem,
             conveyorSubsystem));
     autoChooser.addOption("Right",
         Autos.RightAuto(drivetrainSubsystem, visionSubsystem, armSubsystem, shooterSubsystem,
             conveyorSubsystem));
-    autoChooser.setDefaultOption("Left",
+    autoChooser.addOption("Left",
         Autos.LeftAuto(drivetrainSubsystem, visionSubsystem, armSubsystem, shooterSubsystem,
             conveyorSubsystem));
 

@@ -23,8 +23,6 @@ public class LEDFallingPixels extends Command {
 
   @Override
   public void initialize() {
-    System.out.println("NEW INIT");
-
     this.pixelController = new PixelController(ledSubsystem);
     for (int i = 0; i < 30; i++) {
       this.pixelController.add(i, 255, i * 5, 0);

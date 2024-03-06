@@ -42,7 +42,7 @@ public class LEDRainbowCommand extends Command {
     for (var i = 0; i < ledSubsystem.getBufferLength(); i++) {
       // Calculate the hue - distance along the strip
       final var hue = (rainbowFirstPixelHue + (i * 180 / ledSubsystem.getBufferLength())) % 180;
-      ledSubsystem.setHSV(i, hue, 255, 128);
+      ledSubsystem.setPixelHSV(i, hue, 255, 128);
     }
     // Increase for next iteration to make it move
     rainbowFirstPixelHue = (int) Math.floor(position);

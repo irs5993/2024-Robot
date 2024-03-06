@@ -32,28 +32,7 @@ public class VisionSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    List<PhotonTrackedTarget> targets = getTargets();
 
-    if (!targets.isEmpty()) {
-      // Create a list to store target distances
-      double[] targetDistances = new double[targets.size()];
-
-      // Calculate and store distances for each target
-      for (int i = 0; i < targets.size(); i++) {
-        PhotonTrackedTarget target = targets.get(i);
-        double targetDistance = getTargetDistance(target, SPEAKER_APRILTAG_HEIGHT_METERS);
-        targetDistances[i] = targetDistance;
-      }
-
-      // Display the list of target distances on SmartDashboard
-      SmartDashboard.putNumberArray("Target Distances", targetDistances);
-
-    }
-
-    var SPEAKERT = getSpeakerTarget();
-    if (SPEAKERT != null) {
-      SmartDashboard.putNumber("DİST", getTargetDistance(SPEAKERT, SPEAKER_APRILTAG_HEIGHT_METERS));
-    }
   }
 
   public PhotonTrackedTarget getBestTargetIntake() {

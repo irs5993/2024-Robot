@@ -15,7 +15,7 @@ public class CenterTargetCommand extends Command {
   private final VisionSubsystem visionSubsystem;
   private final DrivetrainSubsystem drivetrainSubsystem;
 
-  private final double MAX_OUT = 0.8;
+  private final double MAX_OUT = 0.5;
   private final PIDController pid = new PIDController(0.12, 0.001, 0.01);
 
   public CenterTargetCommand(DrivetrainSubsystem drivetrainSubsystem, VisionSubsystem visionSubsystem) {

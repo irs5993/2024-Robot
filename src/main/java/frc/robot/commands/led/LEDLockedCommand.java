@@ -20,7 +20,7 @@ public class LEDLockedCommand extends Command {
   @Override
   public void execute() {
     for (var i = 0; i < ledSubsystem.getBufferLength(); i++) {
-      ledSubsystem.setRGB(i, 0, 255, 0);
+      ledSubsystem.setPixelRGB(i, 0, 255, 0);
     }
   }
 
