@@ -24,31 +24,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public final class Autos {
-
-  public static Command hayalGucunuKullan(DrivetrainSubsystem drivetrainSubsystem, VisionSubsystem visionSubsystem,
-      ArmSubsystem armSubsystem, ShooterSubsystem shooterSubsystem, ConveyorSubsystem conveyorSubsystem) {
-    return Commands.sequence(
-
-        new CenterTargetCommand(drivetrainSubsystem, visionSubsystem)
-            .alongWith(new CalculateArmVisionCommand(armSubsystem, visionSubsystem)),
-
-        new ShootCommand(shooterSubsystem, () -> 0.6, () -> 0.6).withTimeout(0.5),
-
-        new DynamicDriveCommand(drivetrainSubsystem, () -> -0.35, () -> -0, () -> 0).withTimeout(1.5),
-
-        new SetArmPositionCommand(armSubsystem,
-            () -> Constants.Arm.MIN_POSITION),
-
-        new RunConveyorCommand(conveyorSubsystem, 0.6).withTimeout(0.73),
-
-        new DynamicDriveCommand(drivetrainSubsystem, () -> 0.35, () -> -0, () -> 0).withTimeout(1.5),
-
-        new CenterTargetCommand(drivetrainSubsystem, visionSubsystem)
-            .alongWith(new CalculateArmVisionCommand(armSubsystem, visionSubsystem)),
-
-        new ShootCommand(shooterSubsystem, () -> 0.6, () -> 0.6)).withTimeout(0.84);
-  }
-
   public static Command CenterAuto(DrivetrainSubsystem drivetrainSubsystem, VisionSubsystem visionSubsystem,
       ArmSubsystem armSubsystem, ShooterSubsystem shooterSubsystem, ConveyorSubsystem conveyorSubsystem) {
     return Commands.sequence(
@@ -60,8 +35,8 @@ public final class Autos {
 
         new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.MIN_POSITION).withTimeout(1.3),
 
-        new DynamicDriveCommand(drivetrainSubsystem, () -> 0.6, () -> 0, () -> 1)
-            .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.52)).withTimeout(1.5),
+        new DynamicDriveCommand(drivetrainSubsystem, () -> 0.6, () -> 0, () -> 1).withTimeout(1.5)
+            .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.52).withTimeout(1.5)),
 
         new RunConveyorCommand(conveyorSubsystem, 0.3)
             .alongWith(new ShootCommand(shooterSubsystem, () -> -0.15, () -> -0.15))
@@ -69,6 +44,7 @@ public final class Autos {
 
         new MoveArmVisionCommand(armSubsystem, visionSubsystem)
             .alongWith(new ShootVelocityCommand(shooterSubsystem, () -> 0.6, () -> 0.6)).withTimeout(2.5),
+
         new RunConveyorCommand(conveyorSubsystem, -0.8).withTimeout(1)
 
     );

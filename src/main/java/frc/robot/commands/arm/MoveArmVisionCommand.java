@@ -48,7 +48,7 @@ public class MoveArmVisionCommand extends Command {
     position = RMath.map(currentPosition, -16, 16, 0.074, 0.02);
 
     armSubsystem.setPosition(position);
-    SmartDashboard.putNumber("AMOGUS POSITION", position);
+    SmartDashboard.putNumber("Vision Calculated Arm Position", position);
   }
 
   // Called once the command ends or is interrupted.

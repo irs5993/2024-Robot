@@ -48,6 +48,7 @@ public class RobotContainer {
     configureDashboard();
   }
 
+  // Joystick tuş atamaları
   private void configureBindings() {
     // DESC - Run the shooter motors with the given velocity values
     joystick.trigger().whileTrue(
@@ -66,9 +67,14 @@ public class RobotContainer {
     // FOR - Feeding the game piece to the shooter
     joystick.button(13).whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.4));
 
+    // Top sıkışınca geri al lütfen🆙
+    joystick.button(9).whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.6)
+        .alongWith(new ShootCommand(shooterSubsystem, () -> -0.2, () -> -0.2)));
+
     // FOR - Moving the arm upwards
-    // DESC - Increase the desired arm angle periodically, allowing for the PID
+    // DESC - Increase the desired arm angle periodically, allowing for the PID->
     // controller to set the motor voltages automatically
+    // WARNING - pozisyon kontrolü, geçirilen speed değeri voltaj değil
     joystick.povUp().whileTrue(new StepArmCommand(armSubsystem, 0.5));
 
     // FOR - Moving the arm downwards
@@ -99,7 +105,7 @@ public class RobotContainer {
     joystick.button(8)
         .onTrue(new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.STAGE_SHOOT_POSITION));
     joystick.button(14)
-        .onTrue(new SetArmPositionCommand(armSubsystem, () -> 0.15));
+        .onTrue(new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.MOVEMENT_POSITION));
     joystick.button(15)
         .onTrue(new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.MIN_POSITION));
     joystick.button(16)
@@ -119,7 +125,9 @@ public class RobotContainer {
 
   }
 
+  // Sürekli çalışan komutlar burda çalışıyo😍🚑
   private void configureCommands() {
+    // Son parametre robot hız çarpanı (0.5 verilirse robot hızı yarı yarıya düşer)
     drivetrainSubsystem.setDefaultCommand(
         new DynamicDriveCommand(drivetrainSubsystem, joystick::getY, joystick::getZ,
             () -> 1));

@@ -14,6 +14,9 @@ public final class Constants {
     public static final double MAX_POSITION = 0.207;
     public static final double MIN_POSITION = 0;
 
+    // Robot hareketliyken kol pozisyonu
+    public static final double MOVEMENT_POSITION = 0.15;
+
     // The position of the arm for retrieving the game piece from the human player
     public static final double HUMAN_POSITION = 0.141;
 
