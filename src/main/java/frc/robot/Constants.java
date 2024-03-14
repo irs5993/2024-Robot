@@ -10,34 +10,33 @@ public final class Constants {
   }
 
   public static class Arm {
-    // Position values for the arm movement limits
+    // Kol hareket limitleri için konum değerleri
     public static final double MAX_POSITION = 0.207;
     public static final double MIN_POSITION = 0;
 
     // Robot hareketliyken kol pozisyonu
     public static final double MOVEMENT_POSITION = 0.15;
 
-    // The position of the arm for retrieving the game piece from the human player
+   // Oyun parçasını human playerdan almak için kolun konumu
     public static final double HUMAN_POSITION = 0.141;
 
-    // The default shooting position of the arm when the robot is touching it's
-    // bumpers to the speaker
+    // Robot tamponlarını hoparlöre dokundurduğunda kolun varsayılan fırlatma konumu
     public static final double DEFAULT_SHOOT_POSITION = 0.035;
 
     public static final double STAGE_SHOOT_POSITION = 0.074;
 
-    // Determines when (or if) the arm position set by the PID loop is at it's
-    // desired
-    // location. Increasing this would make the arm respond less accurately to the
-    // position updates
+    // PID döngüsü tarafından ayarlanan kol konumunun -> 
+    // ne zaman (veya olup olmadığını) istenen konumda olduğunu belirler
+    // Bunu artırmak, kolun konum güncellemelerine ->
+    // daha az doğru yanıt vermesine neden olur
     public static final double CONTROLLER_TOLERANCE = 0.001;
 
-    // Hard limit on the arm motor voltages. If the all the software limits
-    // fail, this is the maximum voltage allowed on the motor controllers
+    // Kol motoru voltajlarında net sınır.
+    // Tüm yazılım limitleri başarısız olursa bu, motor kontrolörlerinde izin verilen maksimum voltajdır
     public static final double SAFETY_MAX_VOLTAGE = 0.75;
 
-    // Offset for the arm position calculation. DO NOT change this unless you are
-    // Arhan Burak Tüzün®™
+    // Kol konumu hesaplaması için ofset. Arhan Burak Tüzün®™ ->
+    // olmadığınız sürece bunu DEĞİŞTİRMEYİN
     public static final double ANGLE_OFFSET = -15;
 
     public static final int SWITCH_PORT = 0;

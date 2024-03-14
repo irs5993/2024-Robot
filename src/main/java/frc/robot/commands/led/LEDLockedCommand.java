@@ -16,7 +16,7 @@ public class LEDLockedCommand extends Command {
     this.ledSubsystem = ledSubsystem;
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
+// Komut planlanırken zamanlayıcı her çalıştığında çağrılır.
   @Override
   public void execute() {
     for (var i = 0; i < ledSubsystem.getBufferLength(); i++) {
@@ -24,7 +24,7 @@ public class LEDLockedCommand extends Command {
     }
   }
 
-  // Returns true when the command should end.
+ // Komutun bitmesi gerektiğinde true değerini döndürür.
   @Override
   public boolean isFinished() {
     return false;

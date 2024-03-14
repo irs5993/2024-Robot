@@ -23,12 +23,12 @@ public class ShootDistanceCommand extends Command {
     this.visionSubsystem = visionSubsystem;
   }
 
-  // Called when the command is initially scheduled.
+  // Komut başlangıçta programlandığında çağrılır.
   @Override
   public void initialize() {
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
+  // Komut planlanırken zamanlayıcı her çalıştığında çağrılır.
   @Override
   public void execute() {
     var target = visionSubsystem.getSpeakerTarget();
@@ -52,13 +52,13 @@ public class ShootDistanceCommand extends Command {
 
   }
 
-  // Called once the command ends or is interrupted.
+  // Komut bittiğinde veya kesintiye uğradığında çağrılır.
   @Override
   public void end(boolean interrupted) {
     this.shooterSubsystem.stop();
   }
 
-  // Returns true when the command should end.
+  // Komutun bitmesi gerektiğinde true değerini döndürür.
   @Override
   public boolean isFinished() {
     return false;

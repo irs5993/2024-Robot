@@ -6,10 +6,10 @@ public class RMath {
     }
 
     public static double convertToRobotAngle(double povAngle) {
-        // Ensure the angle is within the range [0, 360)
+        // Açının [0, 360) aralığında olduğundan emin olur
         double normalizedAngle = (povAngle % 360 + 360) % 360;
 
-        // Convert to the range [-180, 180)
+        // [-180, 180) aralığına dönüştürür
         double robotAngle = normalizedAngle > 180 ? normalizedAngle - 360 : normalizedAngle;
 
         return robotAngle;

@@ -50,51 +50,51 @@ public class RobotContainer {
 
   // Joystick tuş atamaları
   private void configureBindings() {
-    // DESC - Run the shooter motors with the given velocity values
+    // Fırlatıcı motorları verilen hız değerleri ile çalıştırın
     joystick.trigger().whileTrue(
         new ShootDistanceCommand(shooterSubsystem, visionSubsystem).alongWith(new LEDFallingPixels(ledSubsystem)));
 
-    // FOR - Scoring on the amp
-    // DESC - Run the shooter motors slowly, while moving the game piece out
+    // Amp'a atış
+    // Oyun parçasını dışarı çıkarırken atıcı motorlarını yavaşça çalıştırır
     joystick.button(2).whileTrue(
         new ShootCommand(shooterSubsystem, () -> 0.15, () -> 0.15)
             .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.5)));
 
-    // FOR - Taking the game piece in
+    // Game Piece'i içeri almak
     joystick.button(11).whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.8));
-    // FOR - Pushing the game piece out
+    // Game Piece'i dışarı itmek
     joystick.button(12).whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.8));
-    // FOR - Feeding the game piece to the shooter
+    // Game Piece'i shootera beslemek
     joystick.button(13).whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.4));
 
     // Top sıkışınca geri al lütfen🆙
     joystick.button(9).whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.6)
         .alongWith(new ShootCommand(shooterSubsystem, () -> -0.2, () -> -0.2)));
 
-    // FOR - Moving the arm upwards
-    // DESC - Increase the desired arm angle periodically, allowing for the PID->
-    // controller to set the motor voltages automatically
-    // WARNING - pozisyon kontrolü, geçirilen speed değeri voltaj değil
+    // Kolun yukarıya doğru hareket ettirilmesi
+    // İstenilen kol açısını periyodik olarak artırarak ->
+    //PID contollerın motor voltajlarını otomatik olarak ayarlamasına olanak tanır
+    // pozisyon kontrolü, geçirilen speed değeri voltaj değil
     joystick.povUp().whileTrue(new StepArmCommand(armSubsystem, 0.5));
 
-    // FOR - Moving the arm downwards
-    // DESC - Decrease the desired arm angle periodically, allowing for the PID
-    // controller to set the motor voltages automatically
+    // Kolun aşağı doğru hareket ettirilmesi
+    // İstenilen kol açısını periyodik olarak azaltarak ->
+    // PID kontrol cihazının motor voltajlarını otomatik olarak ayarlamasına olanak tanır
     joystick.povDown().whileTrue(new StepArmCommand(armSubsystem, -0.4));
 
-    // FOR - Automatically taking the game piece in
-    // DESC - Center the game piece horizontally on the camera while running the
-    // conveyor motors
+    // Oyun parçasını otomatik olarak alma
+    // Conveyor motorlarını çalıştırırken oyun parçasını ->
+    // kamera üzerinde yatay olarak ortalar
     joystick.button(4).whileTrue(new DriveCenterNoteCommand(drivetrainSubsystem, visionSubsystem, 0.6)
         .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.35)));
 
-    // FOR - Aiming at the speaker
-    // DESC - Center the target horizontally on the camera while also adjusting the
-    // arm angle calculated by the target pitch
+    // Speaker'a nişan almak
+    // Hedef eğimi tarafından hesaplanan kol açısını ayarlarken ->
+    // aynı zamanda hedefi yatay olarak kamera üzerinde ortalar
     joystick.button(3).whileTrue(new CenterTargetCommand(drivetrainSubsystem, visionSubsystem).repeatedly()
         .alongWith(new MoveArmVisionCommand(armSubsystem, visionSubsystem)));
 
-    // Arm Presets
+    // Kol Ön Ayarları
     // ---------------------------------------------------------------------
     // joystick.button(11)
     // .whileTrue(new SetArmPositionCommand(armSubsystem, () ->

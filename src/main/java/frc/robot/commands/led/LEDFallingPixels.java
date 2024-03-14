@@ -30,7 +30,7 @@ public class LEDFallingPixels extends Command {
 
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
+  // Komut planlanırken zamanlayıcı her çalıştığında çağrılır.
   @Override
   public void execute() {
     this.pixelController.setBackground(3, 0, 0);
@@ -40,7 +40,7 @@ public class LEDFallingPixels extends Command {
 
   }
 
-  // Returns true when the command should end.
+ // Komutun bitmesi gerektiğinde true değerini döndürür.
   @Override
   public boolean isFinished() {
     return false;

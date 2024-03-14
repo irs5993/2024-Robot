@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriverPorts;
 
 public class DrivetrainSubsystem extends SubsystemBase {
-  /** Creates a new DrivetrainSubsystem. */
+  /** Yeni bir DrivetrainSubsystem yaratır. */
 
   private final PWMVictorSPX leftLeadMotor;
   private final PWMVictorSPX leftFollowerMotor;
@@ -48,7 +48,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     gyro.reset();
   }
 
-  // This method will be called once per scheduler run
+  // Bu yöntem her zamanlayıcı çalıştırmasında bir kez çağrılacak
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Yaw", getYaw());

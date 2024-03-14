@@ -29,7 +29,7 @@ public class ArmSubsystem extends SubsystemBase {
   private final double DEFAULT_P = 11.6;
   private final double DEFAULT_I = 0.0001;
   private final double DEFAULT_D = 0.7;
-  // Alternative slower PID values: 5, 0, 0.2
+  // Alternatif daha yavaş PID değerleri: 5, 0, 0.2
 
   LinearFilter filter = LinearFilter.singlePoleIIR(0.4, 0.02);
 
@@ -115,7 +115,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public double getAbsolutePosition() {
-    // Return the current position of the arm from the encoder
+    //Kolun mevcut konumunu encoderdan döndürür
     double value = encoder.getPosition().getValueAsDouble();
 
     return filter.calculate(value);

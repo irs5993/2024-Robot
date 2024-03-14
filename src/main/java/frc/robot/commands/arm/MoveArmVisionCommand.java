@@ -23,7 +23,7 @@ public class MoveArmVisionCommand extends Command {
     this.visionSubsystem = visionSubsystem;
   }
 
-  // Called when the command is initially scheduled.
+  // Komut başlangıçta planlandığında çağrılır.
   @Override
   public void initialize() {
     armSubsystem.resetController();
@@ -31,7 +31,7 @@ public class MoveArmVisionCommand extends Command {
     latestPosition = armSubsystem.getAbsolutePosition();
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
+  // Komut planlanırken zamanlayıcı her çalıştığında çağrılır.
   @Override
   public void execute() {
     var target = visionSubsystem.getSpeakerTarget();
@@ -51,13 +51,13 @@ public class MoveArmVisionCommand extends Command {
     SmartDashboard.putNumber("Vision Calculated Arm Position", position);
   }
 
-  // Called once the command ends or is interrupted.
+  // Komut sona erdiğinde veya kesintiye uğradığında çağrılır.
   @Override
   public void end(boolean interrupted) {
     armSubsystem.stop();
   }
 
-  // Returns true when the command should end.
+  // Komutun bitmesi gerektiğinde true değerini döndürür.
   @Override
   public boolean isFinished() {
     return false;

@@ -19,19 +19,19 @@ public class MoveArmCommand extends Command {
     this.speed = speed;
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
+  // Komut planlanırken zamanlayıcı her çalıştığında çağrılır.
   @Override
   public void execute() {
     this.armSubsystem.setMotorSpeed(speed);
   }
 
-  // Called once the command ends or is interrupted.
+  // Komut sona erdiğinde veya kesintiye uğradığında çağrılır.
   @Override
   public void end(boolean interrupted) {
     this.armSubsystem.stop();
   }
 
-  // Returns true when the command should end.
+  // Komutun bitmesi gerektiğinde true değerini döndürür.
   @Override
   public boolean isFinished() {
     return false; // Keep the command running until explicitly interrupted or canceled

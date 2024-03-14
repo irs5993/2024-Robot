@@ -15,13 +15,13 @@ import frc.robot.helpers.RMath;
 public class TurnAngleCommand extends PIDCommand {
   public TurnAngleCommand(DrivetrainSubsystem drivetrainSubsystem, DoubleSupplier angleSupplier) {
     super(
-        // The controller that the command will use
+        // komandın kullanacağı controller
         new PIDController(0.06, 0, 0.01),
-        // This should return the measurement
+        // Ölçüm değerini döndürür
         drivetrainSubsystem::getYaw,
-        // This should return the setpoint (can also be a constant)
+        // Ayarlanmış noktayı döndürür (sabit de olabilir)
         () -> RMath.convertToRobotAngle(angleSupplier.getAsDouble()),
-        // This uses the output
+        // Çıktıyı(output) kullanır
         output -> {
           drivetrainSubsystem.drive(0, MathUtil.clamp(output, -0.4, 0.7));
         });
@@ -32,7 +32,7 @@ public class TurnAngleCommand extends PIDCommand {
     getController().enableContinuousInput(-180, 180);
   }
 
-  // Returns true when the command should end.
+  // Komutun bitmesi gerektiğinde true değerini döndürür.
   @Override
   public boolean isFinished() {
     return getController().atSetpoint();

@@ -14,7 +14,7 @@ public class DynamicDriveCommand extends Command {
   private final DrivetrainSubsystem drivetrainSubsystem;
   private final DoubleSupplier xSpeedSupplier, zRotationSupplier, multiplierSupplier;
 
-  /** Creates a new DynamicDriveCommand. */
+  /** Yeni bir DynamicDriveCommand yaratır. */
   public DynamicDriveCommand(DrivetrainSubsystem drivetrainSubsystem, DoubleSupplier xSpeedSupplier,
       DoubleSupplier zRotationSupplier, DoubleSupplier multiplierSupplier) {
     this.drivetrainSubsystem = drivetrainSubsystem;
@@ -25,12 +25,12 @@ public class DynamicDriveCommand extends Command {
     this.multiplierSupplier = multiplierSupplier;
   }
 
-  // Called when the command is initially scheduled.
+  // Komut başlangıçta programlandığında çağrılır.
   @Override
   public void initialize() {
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
+  // Komut planlanırken zamanlayıcı her çalıştığında çağrılır.
   @Override
   public void execute() {
     double xSpeed = xSpeedSupplier.getAsDouble() * multiplierSupplier.getAsDouble();
@@ -39,13 +39,13 @@ public class DynamicDriveCommand extends Command {
     drivetrainSubsystem.drive(xSpeed, zRotation);
   }
 
-  // Called once the command ends or is interrupted.
+  // Komut bittiğinde veya kesintiye uğradığında çağrılır.
   @Override
   public void end(boolean interrupted) {
     drivetrainSubsystem.stop();
   }
 
-  // Returns true when the command should end.
+ // Komutun bitmesi gerektiğinde true değerini döndürür.
   @Override
   public boolean isFinished() {
     return false;

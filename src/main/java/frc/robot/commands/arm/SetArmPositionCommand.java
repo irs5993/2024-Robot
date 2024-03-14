@@ -20,7 +20,7 @@ public class SetArmPositionCommand extends Command {
     this.positionSupplier = positionSupplier;
   }
 
-  // Called when the command is initially scheduled.
+  // Komut başlangıçta planlandığında çağrılır.
   @Override
   public void initialize() {
     armSubsystem.resetController();
@@ -32,13 +32,13 @@ public class SetArmPositionCommand extends Command {
     armSubsystem.setPosition(positionSupplier.getAsDouble());
   }
 
-  // Called once the command ends or is interrupted.
+  // Komut sona erdiğinde veya kesintiye uğradığında çağrılır.
   @Override
   public void end(boolean interrupted) {
     armSubsystem.stop();
   }
 
-  // Returns true when the command should end.
+  // Komutun bitmesi gerektiğinde true değerini döndürür.
   @Override
   public boolean isFinished() {
     return false;

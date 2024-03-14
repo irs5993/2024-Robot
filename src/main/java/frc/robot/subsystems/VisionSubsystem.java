@@ -20,10 +20,10 @@ public class VisionSubsystem extends SubsystemBase {
   public PhotonCamera main_camera;
   public PhotonCamera intake_camera;
 
-  public final double CAMERA_HEIGHT_METERS = 0.235; // Camera height on robot
-  public final double SPEAKER_APRILTAG_HEIGHT_METERS = 1.45; // AprilTag height
-  public final double SUB_RANGE_METERS = 0.95; // Subwoofer range through the field
-  public final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(37); // Camera angle on robot
+  public final double CAMERA_HEIGHT_METERS = 0.235; // Robotta kamera yüksekliği
+  public final double SPEAKER_APRILTAG_HEIGHT_METERS = 1.45; // AprilTag yüksekliği
+  public final double SUB_RANGE_METERS = 0.95; // Sahadaki subwoofer aralığı
+  public final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(37); // Robotta kamera açısı
 
   public VisionSubsystem() {
     main_camera = new PhotonCamera("main");

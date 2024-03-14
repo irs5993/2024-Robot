@@ -14,16 +14,16 @@ public class LEDSubsystem extends SubsystemBase {
 
   private int rainbowFirstPixelHue = 0;
 
-  /** Creates a new LEDSubsystem. */
+  /** Yeni bir LEDSubsystem yaratır. */
   public LEDSubsystem() {
-    // Reuse buffer
-    // Default to a length of 60, start empty output
-    // Length is expensive to set, so only set it once, then just update data
+    // Tamponu yeniden kullan
+    // Varsayılan uzunluk 60'tır, boş çıktıyı başlat
+    // Uzunluğun ayarlanması pahalıdır, bu nedenle yalnızca bir kez ayarlayın, ardından verileri güncelleyin
     led = new AddressableLED(6);
     ledBuffer = new AddressableLEDBuffer(41);
     led.setLength(ledBuffer.getLength());
 
-    // Set the data
+    // Veriyi ayarlayın
     led.setData(ledBuffer);
     led.start();
   }
@@ -35,7 +35,7 @@ public class LEDSubsystem extends SubsystemBase {
 
   public void rainbow() {
     for (var i = 0; i < getBufferLength(); i++) {
-      // Calculate the hue - distance along the strip
+      // Renk tonu hesapla - şerit boyunca mesafe
       final var hue = (rainbowFirstPixelHue + (i * 180 / getBufferLength())) % 180;
       this.setPixelHSV(i, hue, 255, 128);
     }

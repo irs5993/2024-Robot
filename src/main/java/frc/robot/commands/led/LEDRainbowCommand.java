@@ -13,7 +13,7 @@ public class LEDRainbowCommand extends Command {
   private final LEDSubsystem ledSubsystem;
   private DoubleSupplier speedSupplier;
   private double position = 0;
-  private int rainbowFirstPixelHue = 0; // Starting hue
+  private int rainbowFirstPixelHue = 0; // Başlangıç renk tonu
 
   public LEDRainbowCommand(LEDSubsystem ledSubsystem) {
     addRequirements(ledSubsystem);
@@ -36,15 +36,15 @@ public class LEDRainbowCommand extends Command {
     this.speedSupplier = speedSupplier;
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
+// Komut planlanırken zamanlayıcı her çalıştığında çağrılır.
+@Override
   public void execute() {
     for (var i = 0; i < ledSubsystem.getBufferLength(); i++) {
-      // Calculate the hue - distance along the strip
+      // Renk tonu hesapla - şerit boyunca mesafe
       final var hue = (rainbowFirstPixelHue + (i * 180 / ledSubsystem.getBufferLength())) % 180;
       ledSubsystem.setPixelHSV(i, hue, 255, 128);
     }
-    // Increase for next iteration to make it move
+    // Hareket sağlamak için bir sonraki yinelemede arttırma
     rainbowFirstPixelHue = (int) Math.floor(position);
     // Wrap the hue
     rainbowFirstPixelHue %= 180;
@@ -55,7 +55,7 @@ public class LEDRainbowCommand extends Command {
     }
   }
 
-  // Returns true when the command should end.
+  // Komutun bitmesi gerektiğinde true değerini döndürür.
   @Override
   public boolean isFinished() {
     return false;
