@@ -29,7 +29,7 @@ public final class Autos {
     return Commands.sequence(
 
         new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.DEFAULT_SHOOT_POSITION).withTimeout(2)
-            .alongWith(new ShootVelocityCommand(shooterSubsystem, () -> 0.63, () -> 0.63).withTimeout(2.5)),
+            .alongWith(new ShootVelocityCommand(shooterSubsystem, () -> 0.80, () -> 0.80).withTimeout(2.5)),
 
         new RunConveyorCommand(conveyorSubsystem, -0.8).withTimeout(1),
 
@@ -43,7 +43,7 @@ public final class Autos {
             .alongWith(new DynamicDriveCommand(drivetrainSubsystem, () -> -0.5, () -> 0, () -> 1)).withTimeout(0.3),
 
         new MoveArmVisionCommand(armSubsystem, visionSubsystem)
-            .alongWith(new ShootVelocityCommand(shooterSubsystem, () -> 0.6, () -> 0.6)).withTimeout(2.5),
+            .alongWith(new ShootVelocityCommand(shooterSubsystem, () -> 0.8, () -> 0.8)).withTimeout(2.5),
 
         new RunConveyorCommand(conveyorSubsystem, -0.8).withTimeout(1)
 
@@ -55,7 +55,7 @@ public final class Autos {
     return Commands.sequence(
 
         new SetArmPositionCommand(armSubsystem, () -> 0.027).withTimeout(2)
-            .alongWith(new ShootVelocityCommand(shooterSubsystem, () -> 0.63, () -> 0.63).withTimeout(2.5)),
+            .alongWith(new ShootVelocityCommand(shooterSubsystem, () -> 0.8, () -> 0.8).withTimeout(2.5)),
 
         new RunConveyorCommand(conveyorSubsystem, -0.4).withTimeout(1),
 
@@ -86,21 +86,21 @@ public final class Autos {
     return Commands.sequence(
 
         new SetArmPositionCommand(armSubsystem, () -> 0.027).withTimeout(2)
-            .alongWith(new ShootVelocityCommand(shooterSubsystem, () -> 0.63, () -> 0.63).withTimeout(2.5)),
+            .alongWith(new ShootVelocityCommand(shooterSubsystem, () -> 0.8, () -> 0.8).withTimeout(2.5)),
 
         new RunConveyorCommand(conveyorSubsystem, -0.4).withTimeout(1),
 
         new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.MIN_POSITION).withTimeout(1.3)
-            .alongWith(new DynamicDriveCommand(drivetrainSubsystem, () -> 0.6, () -> -0.7, () -> 1).withTimeout(2.5)),
+            .alongWith(new DynamicDriveCommand(drivetrainSubsystem, () -> 0.55, () -> -0.62, () -> 1).withTimeout(2)),
 
-        new DriveCenterNoteCommand(drivetrainSubsystem, visionSubsystem, 0.6)
-            .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.52)).withTimeout(2.3),
+        new DriveCenterNoteCommand(drivetrainSubsystem, visionSubsystem, 0.4)
+            .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.52)).withTimeout(1.5),
 
         new RunConveyorCommand(conveyorSubsystem, 0.3)
             .alongWith(new ShootCommand(shooterSubsystem, () -> -0.15, () -> -0.15))
             .alongWith(new DynamicDriveCommand(drivetrainSubsystem, () -> -0.5, () -> 0, () -> 1)).withTimeout(0.3),
 
-        new DynamicDriveCommand(drivetrainSubsystem, () -> -0.6, () -> 0, () -> 1).withTimeout(0.7),
+        new DynamicDriveCommand(drivetrainSubsystem, () -> -0.5, () -> 0, () -> 1).withTimeout(0.7),
 
         new DynamicDriveCommand(drivetrainSubsystem, () -> 0, () -> 0.65, () -> 1)
             .until(() -> visionSubsystem.getSpeakerTarget() != null),

@@ -29,6 +29,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   private final DifferentialDrive driveBase;
   private final AHRS gyro;
+  public boolean controller_switch = false;
 
   public DrivetrainSubsystem() {
     leftLeadMotor = new PWMVictorSPX(DriverPorts.CHASIS_LEAD_LEFT);

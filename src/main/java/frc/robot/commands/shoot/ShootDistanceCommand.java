@@ -41,8 +41,8 @@ public class ShootDistanceCommand extends Command {
       latestPosition = currentPosition;
     }
 
-    double topVelocity = RMath.map(currentPosition, -20, 20, 0.69, 0.57);
-    double bottomVelocity = RMath.map(currentPosition, -20, 20, 0.75, 0.57);
+    double topVelocity = RMath.map(currentPosition, -20, 20, 0.8, 0.6);
+    double bottomVelocity = RMath.map(currentPosition, -20, 20, 0.83, 0.64);
 
     this.shooterSubsystem.setTopMotorVelocity(topVelocity);
     this.shooterSubsystem.setBottomMotorVelocity(bottomVelocity);

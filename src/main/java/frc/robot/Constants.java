@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-
 public final class Constants {
   public static class Commands {
 
@@ -23,7 +22,7 @@ public final class Constants {
 
     // The default shooting position of the arm when the robot is touching it's
     // bumpers to the speaker
-    public static final double DEFAULT_SHOOT_POSITION = 0.035;
+    public static final double DEFAULT_SHOOT_POSITION = 0.027;
 
     public static final double STAGE_SHOOT_POSITION = 0.074;
 

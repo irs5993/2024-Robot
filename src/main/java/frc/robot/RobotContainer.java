@@ -32,11 +32,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
   private final CommandJoystick joystick = new CommandJoystick(OperatorConstants.JOYSTICK_PORT);
-  private final XboxController gamepad = new XboxController(OperatorConstants.GAMEPAD_PORT);
-
+  private final CommandXboxController gamepad = new CommandXboxController(OperatorConstants.GAMEPAD_PORT);
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final ConveyorSubsystem conveyorSubsystem = new ConveyorSubsystem();
@@ -46,24 +46,18 @@ public class RobotContainer {
 
   private SendableChooser<Command> autoChooser = new SendableChooser<>();
 
-  private final EventLoop shootDistanceLoop = new EventLoop();
-  private final EventLoop ampScoringLoop = new EventLoop();
-  private final EventLoop intakeLoop = new EventLoop();
-  private final EventLoop autoIntakeLoop = new EventLoop();
-  private final EventLoop releaseLoop = new EventLoop();
-  private final EventLoop aimLoop = new EventLoop();
-  private final EventLoop ampAimLoop = new EventLoop();
-  private final EventLoop intakeAngleLoop = new EventLoop();
-  private final EventLoop moveUpLoop = new EventLoop();
-  private final EventLoop moveDownLoop = new EventLoop();
-  private final EventLoop movementPosLoop = new EventLoop();
-  private final EventLoop defaultShootLoop = new EventLoop();
-
   public RobotContainer() {
     configureBindings();
     configureCommands();
     configureDashboard();
     configureGamepad();
+  }
+
+  public static double deadzone(double value, double deadzone) {
+    if (Math.abs(value) < deadzone) {
+      return 0;
+    }
+    return value;
   }
 
   // Joystick tuş atamaları
@@ -79,7 +73,8 @@ public class RobotContainer {
             .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.5)));
 
     // FOR - Taking the game piece in
-    joystick.button(11).whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.8));
+    // joystick.button(11).whileTrue(new RunConveyorCommand(conveyorSubsystem,
+    // -0.8));
     // FOR - Pushing the game piece out
     joystick.button(12).whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.8));
     // FOR - Feeding the game piece to the shooter
@@ -114,9 +109,8 @@ public class RobotContainer {
 
     // Arm Presets
     // ---------------------------------------------------------------------
-    // joystick.button(11)
-    // .whileTrue(new SetArmPositionCommand(armSubsystem, () ->
-    // Constants.Arm.HUMAN_POSITION)
+    joystick.button(11)
+        .whileTrue(new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.HUMAN_POSITION));
     // .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.5)));
     joystick.button(7)
         .onTrue(new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.MAX_POSITION));
@@ -147,59 +141,48 @@ public class RobotContainer {
   private void configureGamepad() {
 
     // Atış tekerleri çalıştırma fonksiyonu, RT'ye atanmış.
-    BooleanEvent shootDistance = new BooleanEvent(shootDistanceLoop, gamepad.rightTrigger(shootDistanceLoop));
-    shootDistance.ifHigh(() -> new ShootDistanceCommand(shooterSubsystem, visionSubsystem)
-        .alongWith(new LEDFallingPixels(ledSubsystem)));
+    gamepad.rightTrigger().whileTrue(
+        new ShootDistanceCommand(shooterSubsystem, visionSubsystem).alongWith(new LEDFallingPixels(ledSubsystem)));
 
     // AMP'e atış yapmak için atış motorları ve conveyor fonksiyonu, LT'ye atanmış.
-    BooleanEvent ampScoring = new BooleanEvent(ampScoringLoop, gamepad.leftTrigger(ampScoringLoop));
-    ampScoring.ifHigh(() -> new ShootCommand(shooterSubsystem, () -> 0.15, () -> 0.15)
-        .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.5)));
+    gamepad.leftTrigger().whileTrue(
+        new ShootCommand(shooterSubsystem, () -> 0.15, () -> 0.15)
+            .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.5)));
 
     // Intake ve conveyoru çalıştırmak için fonksiyon, A'ya atanmış
-    BooleanEvent intakeButton = new BooleanEvent(intakeLoop, gamepad.a(intakeLoop));
-    intakeButton.ifHigh(() -> new RunConveyorCommand(conveyorSubsystem, -0.8));
+    gamepad.a().whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.8));
 
     // Vision ile otomatik intake için fonksiyon, START tuşuna atanmış.
-    BooleanEvent autoIntake = new BooleanEvent(autoIntakeLoop, gamepad.start(autoIntakeLoop));
-    autoIntake.ifHigh(() -> new DriveCenterNoteCommand(drivetrainSubsystem, visionSubsystem, 0.6)
+    gamepad.start().whileTrue(new DriveCenterNoteCommand(drivetrainSubsystem, visionSubsystem, 0.6)
         .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.35)));
 
     // Halkayı geri bırakmak için fonksiyon, B'ye atanmış.
-    BooleanEvent releaseButton = new BooleanEvent(releaseLoop, gamepad.b(releaseLoop));
-    releaseButton.ifHigh(() -> new RunConveyorCommand(conveyorSubsystem, 0.6)
+    gamepad.b().whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.6)
         .alongWith(new ShootCommand(shooterSubsystem, () -> -0.2, () -> -0.2)));
 
     // Vision ile atış için otomatik robot ve kol hizalama fonksiyonu, RB tuşuna
     // atanmış.
-    BooleanEvent aimButton = new BooleanEvent(aimLoop, gamepad.rightBumper(aimLoop));
-    aimButton.ifHigh(() -> new CenterTargetCommand(drivetrainSubsystem, visionSubsystem).repeatedly()
+    gamepad.rightBumper().whileTrue(new CenterTargetCommand(drivetrainSubsystem, visionSubsystem).repeatedly()
         .alongWith(new MoveArmVisionCommand(armSubsystem, visionSubsystem)));
 
     // AMP'e atış yapmak için kol hizalama tuşu, LB'ye atanmış.
-    BooleanEvent ampAimButton = new BooleanEvent(ampAimLoop, gamepad.leftBumper(ampAimLoop));
-    ampAimButton.ifHigh(() -> new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.MAX_POSITION));
+    gamepad.leftBumper().whileTrue(new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.MAX_POSITION));
 
     // Kolu intake açısına hizalamak için fonksiyon, X'e atanmış.
-    BooleanEvent intakeAngleButton = new BooleanEvent(intakeAngleLoop, gamepad.x(intakeAngleLoop));
-    intakeAngleButton.ifHigh(() -> new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.MIN_POSITION));
+    gamepad.x().whileTrue(new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.MIN_POSITION));
 
     // Kolu yukarı oynatmak için fonksiyon, Yukarı tuşuna atanmış.
-    BooleanEvent moveUpButton = new BooleanEvent(moveUpLoop, gamepad.povUp(moveUpLoop));
-    moveUpButton.ifHigh(() -> new StepArmCommand(armSubsystem, 0.5));
+    gamepad.povUp().whileTrue(new StepArmCommand(armSubsystem, 0.5));
 
     // Kolu aşağı oynatmak için fonksiyon, Aşağı tuşuna atanmış.
-    BooleanEvent moveDownButton = new BooleanEvent(moveDownLoop, gamepad.povDown(moveDownLoop));
-    moveDownButton.ifHigh(() -> new StepArmCommand(armSubsystem, -0.4));
+    gamepad.povDown().whileTrue(new StepArmCommand(armSubsystem, -0.4));
 
     // Kolu maç içi hareket pozisyonuna getirmek için fonksiyon, Sol tuşuna atanmış.
-    BooleanEvent movementPosButton = new BooleanEvent(movementPosLoop, gamepad.povLeft(movementPosLoop));
-    movementPosButton.ifHigh(() -> new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.MOVEMENT_POSITION));
+    gamepad.povLeft().whileTrue(new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.MOVEMENT_POSITION));
 
     // Kolu yaslanmış şekilde atış yapabilecek açıya getirmek için fonksiyon, Sağ
     // tuşuna atanmış.
-    BooleanEvent defaultShootButton = new BooleanEvent(defaultShootLoop, gamepad.povRight(defaultShootLoop));
-    defaultShootButton.ifHigh(() -> new SetArmPositionCommand(armSubsystem,
+    gamepad.povRight().whileTrue(new SetArmPositionCommand(armSubsystem,
         () -> Constants.Arm.DEFAULT_SHOOT_POSITION));
   }
 
@@ -207,7 +190,8 @@ public class RobotContainer {
   private void configureCommands() {
     // Son parametre robot hız çarpanı (0.5 verilirse robot hızı yarı yarıya düşer)
     drivetrainSubsystem.setDefaultCommand(
-        new DynamicDriveCommand(drivetrainSubsystem, joystick::getY, joystick::getZ,
+        new DynamicDriveCommand(drivetrainSubsystem, joystick::getY,
+            () -> deadzone(joystick.getZ(), 0.12),
             () -> 1));
 
     armSubsystem.setDefaultCommand(new KeepArmPositionCommand(armSubsystem));
