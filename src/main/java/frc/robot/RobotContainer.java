@@ -184,14 +184,23 @@ public class RobotContainer {
     // tuşuna atanmış.
     gamepad.povRight().whileTrue(new SetArmPositionCommand(armSubsystem,
         () -> Constants.Arm.DEFAULT_SHOOT_POSITION));
+
+    // Robot önünü değiştir
+    gamepad.y().onTrue(
+        Commands.runOnce(() -> drivetrainSubsystem.reverseDirection = !drivetrainSubsystem.reverseDirection,
+            drivetrainSubsystem));
   }
 
   // Sürekli çalışan komutlar burda çalışıyo😍🚑
   private void configureCommands() {
     // Son parametre robot hız çarpanı (0.5 verilirse robot hızı yarı yarıya düşer)
     drivetrainSubsystem.setDefaultCommand(
-        new DynamicDriveCommand(drivetrainSubsystem, joystick::getY,
-            () -> deadzone(joystick.getZ(), 0.12),
+        new DynamicDriveCommand(drivetrainSubsystem,
+            () -> drivetrainSubsystem.reverseDirection ? -joystick.getY()
+                : joystick
+                    .getY(),
+            () -> drivetrainSubsystem.reverseDirection ? -deadzone(joystick.getZ(), 0.12)
+                : deadzone(joystick.getZ(), 0.12),
             () -> 1));
 
     armSubsystem.setDefaultCommand(new KeepArmPositionCommand(armSubsystem));
