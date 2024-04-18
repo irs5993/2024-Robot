@@ -23,15 +23,18 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 
 public class RobotContainer {
   private final CommandJoystick joystick = new CommandJoystick(OperatorConstants.JOYSTICK_PORT);
+  private final CommandPS4Controller gamepad = new CommandPS4Controller(1);
 
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
@@ -46,6 +49,7 @@ public class RobotContainer {
     configureBindings();
     configureCommands();
     configureDashboard();
+    configureGamepad();
   }
 
   // Joystick tuş atamaları
@@ -73,13 +77,14 @@ public class RobotContainer {
 
     // Kolun yukarıya doğru hareket ettirilmesi
     // İstenilen kol açısını periyodik olarak artırarak ->
-    //PID contollerın motor voltajlarını otomatik olarak ayarlamasına olanak tanır
+    // PID contollerın motor voltajlarını otomatik olarak ayarlamasına olanak tanır
     // pozisyon kontrolü, geçirilen speed değeri voltaj değil
     joystick.povUp().whileTrue(new StepArmCommand(armSubsystem, 0.5));
 
     // Kolun aşağı doğru hareket ettirilmesi
     // İstenilen kol açısını periyodik olarak azaltarak ->
-    // PID kontrol cihazının motor voltajlarını otomatik olarak ayarlamasına olanak tanır
+    // PID kontrol cihazının motor voltajlarını otomatik olarak ayarlamasına olanak
+    // tanır
     joystick.povDown().whileTrue(new StepArmCommand(armSubsystem, -0.4));
 
     // Oyun parçasını otomatik olarak alma
@@ -156,6 +161,61 @@ public class RobotContainer {
 
     SmartDashboard.putData(autoChooser);
 
+  }
+
+  // Gamepad Komutları - Arhan
+  private void configureGamepad() {
+
+    // Atış tekerleri çalıştırma fonksiyonu, RT'ye atanmış.
+    gamepad.R2().whileTrue(
+        new ShootDistanceCommand(shooterSubsystem, visionSubsystem).alongWith(new LEDFallingPixels(ledSubsystem)));
+
+    // AMP'e atış yapmak için atış motorları ve conveyor fonksiyonu, LT'ye atanmış.
+    gamepad.L2().whileTrue(
+        new ShootCommand(shooterSubsystem, () -> 0.15, () -> 0.15)
+            .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.5)));
+
+    // Intake ve conveyoru çalıştırmak için fonksiyon, A'ya atanmış
+    gamepad.cross().whileTrue(new RunConveyorCommand(conveyorSubsystem, -0.8));
+
+    // Vision ile otomatik intake için fonksiyon, START tuşuna atanmış.
+    gamepad.options().whileTrue(new DriveCenterNoteCommand(drivetrainSubsystem, visionSubsystem, 0.6)
+        .alongWith(new RunConveyorCommand(conveyorSubsystem, -0.35)));
+
+    // Halkayı geri bırakmak için fonksiyon, B'ye atanmış.
+    gamepad.circle().whileTrue(new RunConveyorCommand(conveyorSubsystem, 0.6)
+        .alongWith(new ShootCommand(shooterSubsystem, () -> -0.2, () -> -0.2)));
+
+    // Vision ile atış için otomatik robot ve kol hizalama fonksiyonu, RB tuşuna
+    // atanmış.
+    gamepad.R1().whileTrue(new CenterTargetCommand(drivetrainSubsystem, visionSubsystem).repeatedly()
+        .alongWith(new MoveArmVisionCommand(armSubsystem, visionSubsystem)));
+
+    // AMP'e atış yapmak için kol hizalama tuşu, LB'ye atanmış.
+    gamepad.L1().whileTrue(new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.MAX_POSITION));
+
+    // Kolu intake açısına hizalamak için fonksiyon, X'e atanmış.
+    gamepad.square().whileTrue(new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.MIN_POSITION));
+
+    // Kolu yukarı oynatmak için fonksiyon, Yukarı tuşuna atanmış.
+    gamepad.povUp().whileTrue(new StepArmCommand(armSubsystem, 0.5));
+
+    // Kolu aşağı oynatmak için fonksiyon, Aşağı tuşuna atanmış.
+    gamepad.povDown().whileTrue(new StepArmCommand(armSubsystem, -0.4));
+
+    // Kolu maç içi hareket pozisyonuna getirmek için fonksiyon, Sol tuşuna atanmış.
+    gamepad.povLeft().whileTrue(new SetArmPositionCommand(armSubsystem, () -> Constants.Arm.MOVEMENT_POSITION));
+
+    // Kolu yaslanmış şekilde atış yapabilecek açıya getirmek için fonksiyon, Sağ
+    // tuşuna atanmış.
+    gamepad.povRight().whileTrue(new SetArmPositionCommand(armSubsystem,
+        () -> Constants.Arm.DEFAULT_SHOOT_POSITION));
+
+    // // Robot önünü değiştir
+    // gamepad.triangle().onTrue(
+    // Commands.runOnce(() -> drivetrainSubsystem.reverseDirection =
+    // !drivetrainSubsystem.reverseDirection,
+    // drivetrainSubsystem));
   }
 
   private void configureDashboard() {
