@@ -143,7 +143,7 @@ public class RobotContainer {
       if (visionSubsystem.getSpeakerTarget() != null) {
         ledSubsystem.setRGB(0, 0, 255);
       } else if (visionSubsystem.getBestTargetIntake() != null) {
-        ledSubsystem.setRGB(255, 20, 0);
+        ledSubsystem.rainbow();
       } else {
         ledSubsystem.rainbow();
       }

@@ -18,8 +18,9 @@ public class LEDSubsystem extends SubsystemBase {
   public LEDSubsystem() {
     // Tamponu yeniden kullan
     // Varsayılan uzunluk 60'tır, boş çıktıyı başlat
-    // Uzunluğun ayarlanması pahalıdır, bu nedenle yalnızca bir kez ayarlayın, ardından verileri güncelleyin
-    led = new AddressableLED(6);
+    // Uzunluğun ayarlanması pahalıdır, bu nedenle yalnızca bir kez ayarlayın,
+    // ardından verileri güncelleyin
+    led = new AddressableLED(4);
     ledBuffer = new AddressableLEDBuffer(41);
     led.setLength(ledBuffer.getLength());
 

@@ -45,7 +45,7 @@ public class MoveArmVisionCommand extends Command {
       latestPosition = currentPosition;
     }
 
-    position = RMath.map(currentPosition, -16, 16, 0.074, 0.02);
+    position = RMath.map(currentPosition, -20, 15, 0.064, 0.028);
 
     armSubsystem.setPosition(position);
     SmartDashboard.putNumber("Vision Calculated Arm Position", position);
